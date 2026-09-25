@@ -12,6 +12,8 @@ export interface Media {
   alt?: string
   preview?: string // site 用：一段网站滚动的录屏，也当首页封面
   poster?: string // 视频加载前显示的图
+  href?: string // 图片可以点：点了在新窗口打开这个网址
+  start?: number // youtube 用：从第几秒开始播放
 }
 
 export interface ArchiveItem {
@@ -20,10 +22,14 @@ export interface ArchiveItem {
   category: CategoryKey
   label: string // Archive 格子下面的小字
   title: string
-  year?: string // 显示在标题后面：TITLE, 2025
+  year?: string // 显示在标题后面：TITLE, 2025, SWITZERLAND（地点按年份自动加）
+  place?: string // 地点不按年份时单独写；写 '' 就不显示地点
+  titleZh?: string // 中文标题，显示在英文标题下面
+  works?: { title: string, titleZh?: string, year?: string }[] // 一个项目里有好几部作品时，代替大标题一行一行列出来
   meta?: string // 例如 "Film Production · Shanghai · 2019"
   role?: string // 例如 "Producer"
   text?: string // 简短介绍
+  textZh?: string // 中文介绍，显示在英文介绍下面
   cover?: string // 首页封面图；不写就用 media 里的第一个
   coverVideo?: string // 动态封面（静音循环播放），这时 cover 当加载前显示的图
   media: Media[]
@@ -58,6 +64,7 @@ export const items: ArchiveItem[] = [
     label: 'Video Journalist',
     title: 'CAMP ON THE ROAD TO GHULJA',
     year: '2025',
+    place: 'NETHERLANDS', // 在阿姆斯特丹 Jan 的工作室采访
     role: 'Video Journalist',
     text: 'An interview with artist Jan Rothuizen about Camp on the Road to Ghulja, an investigation that mapped a detention camp in Xinjiang without ever setting foot in China.',
     cover: '/photo/06camp-ghulja-poster.jpg',
@@ -80,16 +87,34 @@ export const items: ArchiveItem[] = [
     links: [{ label: 'www.digezz.ch/meinig-zellt', href: 'https://www.digezz.ch/meinig-zellt/' }],
     linksFirst: true,
   },
-  { slug: 'documentary', number: '08', category: 'stories', label: 'Documentary', title: 'DOCUMENTARY', media: [] },
+  {
+    slug: 'one-founder-one-venture',
+    number: '08',
+    category: 'stories',
+    label: 'Social Media Series Creator',
+    title: 'ONE FOUNDER, ONE VENTURE – STORIES IN SWITZERLAND',
+    titleZh: '一人一公司：瑞士创业故事',
+    year: '2026',
+    place: '', // 标题里已经有 STORIES IN SWITZERLAND
+    role: 'Social Media Series Creator',
+    text: 'One Founder, One Venture – Stories in Switzerland is a social media project bringing together in-depth interviews, shorts and storytelling about solo entrepreneurs, independent professionals and one-person businesses in Switzerland.',
+    textZh: '《一人一公司：瑞士创业故事》是一个社交媒体项目，汇集了关于瑞士自由职业者、独立专业人士和一人公司的深度访谈、短视频与故事内容。',
+    cover: '/photo/08one-founder.jpg',
+    // YouTube 频道页面的截图，点了打开频道
+    media: [{ type: 'image', src: '/photo/08youtube-channel.jpg', alt: 'YouTube channel: Stories in Switzerland', href: 'https://www.youtube.com/channel/UC8zfK7OKufZ3JLtwS_z9LZA' }],
+    links: [{ label: 'www.digezz.ch/one-founder-one-venture', href: 'https://www.digezz.ch/one-founder-one-venture-stories-in-switzerland/' }],
+    linksFirst: true,
+  },
 
   // ---------- INTERACTIONS ----------
   {
     slug: 'story-website',
     number: '03',
     category: 'interactions',
-    label: 'Website',
+    label: 'Designer & Developer',
     title: 'SCROLLYTELLING WEBSITE',
     year: '2025',
+    role: 'Designer & Developer',
     text: 'An interactive website that brings together illustration, photography and animation to tell the story of the changes right outside my front door.',
     media: [{
       type: 'site',
@@ -132,11 +157,16 @@ export const items: ArchiveItem[] = [
     slug: 'exploration',
     number: '05',
     category: 'explorations',
-    label: 'Exploration',
-    title: 'EXPLORATION', // TODO
-    meta: 'Life Exploration',
-    text: 'A few words about it.', // TODO
-    media: [{ type: 'image', src: '/photo/05explore.jpg', alt: 'Two people talking under blue light' }],
+    label: 'Contemporary Theatre Performer, Workshop Leader',
+    title: 'MEAT I · MEAT II · CLEANSING', // 浏览器标签页上的名字；页面上显示下面的 works
+    works: [
+      { title: 'MEAT I', titleZh: '《肉I》', year: '2017' },
+      { title: 'MEAT II: NIAOLYMPICS PART 2', titleZh: '《肉II》“白日夜话：被子下面”', year: '2018' },
+      { title: 'CLEANSING: NIAONIAO MORNING CALL', titleZh: '《清洁》“嬲嬲早会”', year: '2018' },
+    ],
+    role: 'Contemporary Theatre Performer, Workshop Leader',
+    cover: '/photo/05explore.jpg',
+    media: [{ type: 'youtube', src: 'Efs4PtVbWjc', start: 4, alt: 'MEAT / CLEANSING' }],
   },
   { slug: 'yoga', number: '13', category: 'explorations', label: 'Yoga', title: 'YOGA', media: [] },
   { slug: 'research', number: '14', category: 'explorations', label: 'Research', title: 'RESEARCH', media: [] },
@@ -145,6 +175,13 @@ export const items: ArchiveItem[] = [
 
 // 滚动动画用的四张图：02 03 04 05
 export const firstFrames = ['02', '03', '04', '05'].map(n => items.find(i => i.number === n)!)
+
+// 地点跟着年份：2019 年以前在中国，之后在瑞士；item 写了 place 就用 place
+export function placeOf(year?: string, place?: string) {
+  if (place !== undefined) return place
+  if (!year) return ''
+  return Number(year) < 2019 ? 'CHINA' : 'SWITZERLAND'
+}
 
 export function itemsIn(category: CategoryKey) {
   return items.filter(i => i.category === category)

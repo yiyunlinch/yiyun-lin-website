@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
       <iframe
         v-else-if="current?.type === 'youtube'"
         :key="current.src"
-        :src="`https://www.youtube-nocookie.com/embed/${current.src}?autoplay=1&mute=1&playsinline=1&rel=0`"
+        :src="`https://www.youtube-nocookie.com/embed/${current.src}?autoplay=1&mute=1&playsinline=1&rel=0&start=${current.start ?? 0}`"
         :title="current.alt ?? title"
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
         allowfullscreen
@@ -130,6 +130,9 @@ onBeforeUnmount(() => {
           controls
           playsinline
         />
+        <a v-else-if="current.href" :key="current.src" :href="current.href" target="_blank" rel="noopener" class="img-link">
+          <img :src="current.src" :alt="current.alt ?? title">
+        </a>
         <img v-else :key="current.src" :src="current.src" :alt="current.alt ?? title">
       </template>
       <span v-else class="placeholder">IMAGE / VIDEO</span>
@@ -161,6 +164,11 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.img-link {
+  width: 100%;
+  height: 100%;
 }
 
 .stage iframe {
