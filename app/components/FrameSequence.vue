@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// 电脑版滚动动画：ONE FRAME → 两格（出现那句话）→ 三格 → 四格 → ARCHIVE
+// 电脑版滚动动画：一张图（上面是那句话）→ 两格 → 三格 → 四格 → ARCHIVE
 //
 // 原理：
 // - 外层 section 很高，里面的 .sticky 固定在屏幕上（position: sticky）
@@ -13,13 +13,13 @@ const progress = ref(0)
 
 // ---------- 时间轴 ----------
 // 单位是"屏"：往下滚一整屏 = 1。想调节奏，改这里的数字就行
+// 0 = 这一段刚好顶到屏幕上方；负数 = 这一段还在从下面滑上来
 const SCREENS = 1.6 // 整段动画的滚动距离
 const T = {
-  oneFrameOut: [0.15, 0.25],
   k2: [0.20, 0.45], // 出现 03
   k3: [0.45, 0.70], // 出现 04
   k4: [0.70, 0.95], // 出现 05
-  phraseIn: [0.20, 0.35], // 和 03 一起出现
+  phraseIn: [-0.5, 0], // 滑上来时淡入，到第二页就完全出现
   phraseOut: [1.00, 1.15],
   archiveIn: [1.20, 1.45],
 } as const
@@ -37,7 +37,6 @@ const frames = computed(() => {
   return 1 + ramp(p, T.k2) + ramp(p, T.k3) + ramp(p, T.k4)
 })
 
-const oneFrameOpacity = computed(() => 1 - ramp(progress.value, T.oneFrameOut))
 const phraseOpacity = computed(() => ramp(progress.value, T.phraseIn) - ramp(progress.value, T.phraseOut))
 const archiveOpacity = computed(() => ramp(progress.value, T.archiveIn))
 
@@ -80,7 +79,7 @@ function update() {
   const el = section.value
   if (!el) return
   const scrolled = -el.getBoundingClientRect().top / window.innerHeight // 滚了几屏
-  progress.value = Math.min(Math.max(scrolled, 0), SCREENS)
+  progress.value = Math.min(Math.max(scrolled, -1), SCREENS)
 }
 function onScroll() {
   raf ||= requestAnimationFrame(update)
@@ -110,8 +109,6 @@ onBeforeUnmount(() => {
 
     <div class="sticky" :style="{ '--archive': archiveOpacity }">
       <div class="container texts">
-        <p class="stage-title" :style="{ opacity: oneFrameOpacity }">ONE FRAME</p>
-
         <!-- 两句话一起出现，不分开做动画 -->
         <p class="stage-title phrase" :style="{ opacity: phraseOpacity }">
           Exploring the digital.&emsp;Feeling the physical.

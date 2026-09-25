@@ -21,27 +21,87 @@ function onKey(e: KeyboardEvent) {
 onMounted(() => window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
-// 手机：左右滑动
-let startX = 0
-function onTouchStart(e: TouchEvent) {
-  startX = e.touches[0]!.clientX
+// 嵌入网站只在电脑上显示；手机上会抢滚动，所以显示录屏视频
+// 一开始（服务器渲染时）先当手机处理，页面打开后再判断
+const isDesktop = ref(false)
+let desktopQuery: MediaQueryList | undefined
+function onQueryChange() {
+  isDesktop.value = desktopQuery!.matches
 }
-function onTouchEnd(e: TouchEvent) {
-  const dx = e.changedTouches[0]!.clientX - startX
-  if (count.value > 1 && Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+
+// 嵌入的网站翻页时会用 scrollIntoView，把外面的页面也一起滚走。
+// 所以：等页面停稳后再加载它；之后外面的页面只要不是用户自己滚的，就滚回原位
+const frameReady = ref(false)
+let lastY = 0
+let userUntil = 0
+let idleTimer: ReturnType<typeof setTimeout> | undefined
+
+function onUserInput() {
+  userUntil = performance.now() + 1000
 }
+function onPageScroll() {
+  if (current.value?.type !== 'site' || !isDesktop.value) return
+  if (!frameReady.value) {
+    // 还在等页面停稳（比如从首页点进来，正在滚回顶部）
+    clearTimeout(idleTimer)
+    idleTimer = setTimeout(armFrame, 300)
+    return
+  }
+  if (performance.now() < userUntil) lastY = window.scrollY
+  else window.scrollTo({ top: lastY, behavior: 'instant' })
+}
+function armFrame() {
+  lastY = window.scrollY
+  frameReady.value = true
+}
+
+const userEvents = ['wheel', 'touchmove', 'keydown', 'pointerdown'] as const
+onMounted(() => {
+  desktopQuery = window.matchMedia('(min-width: 900px)')
+  onQueryChange()
+  desktopQuery.addEventListener('change', onQueryChange)
+  userEvents.forEach(e => window.addEventListener(e, onUserInput, { passive: true }))
+  window.addEventListener('scroll', onPageScroll, { passive: true })
+  idleTimer = setTimeout(armFrame, 300)
+})
+onBeforeUnmount(() => {
+  desktopQuery?.removeEventListener('change', onQueryChange)
+  userEvents.forEach(e => window.removeEventListener(e, onUserInput))
+  window.removeEventListener('scroll', onPageScroll)
+  clearTimeout(idleTimer)
+})
 </script>
 
 <template>
   <div class="viewer" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
     <div class="stage">
-      <template v-if="current">
+      <template v-if="current?.type === 'site'">
+        <iframe
+          v-if="isDesktop"
+          :key="current.src"
+          :src="frameReady ? current.src : undefined"
+          :title="current.alt ?? title"
+        />
+        <video
+          v-else
+          :key="current.preview"
+          :src="current.preview"
+          :poster="current.poster"
+          autoplay
+          muted
+          loop
+          playsinline
+        />
+      </template>
+      <template v-else-if="current">
         <video
           v-if="current.type === 'video'"
           :key="current.src"
           :src="current.src"
+          :poster="current.poster"
           controls
           playsinline
+          preload="metadata"
         />
         <img v-else :key="current.src" :src="current.src" :alt="current.alt ?? title">
       </template>
@@ -74,6 +134,12 @@ function onTouchEnd(e: TouchEvent) {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.stage iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .placeholder {

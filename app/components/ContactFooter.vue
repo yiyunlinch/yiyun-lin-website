@@ -31,9 +31,10 @@ import { site } from '~/data/site'
 }
 
 .links a {
-  font-size: clamp(32px, 5vw, 72px);
+  font-size: var(--display);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   transition: color 0.3s;
 }
 

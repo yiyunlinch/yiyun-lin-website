@@ -5,9 +5,12 @@
 export type CategoryKey = 'stories' | 'interactions' | 'objects' | 'explorations'
 
 export interface Media {
-  type: 'image' | 'video'
+  // site = 嵌入一个网站：电脑上可以直接在页面里浏览，手机上显示 preview 视频
+  type: 'image' | 'video' | 'site'
   src: string
   alt?: string
+  preview?: string // site 用：一段网站滚动的录屏，也当首页封面
+  poster?: string // 视频加载前显示的图
 }
 
 export interface ArchiveItem {
@@ -16,9 +19,11 @@ export interface ArchiveItem {
   category: CategoryKey
   label: string // Archive 格子下面的小字
   title: string
+  year?: string // 显示在标题后面：TITLE, 2025
   meta?: string // 例如 "Film Production · Shanghai · 2019"
   role?: string // 例如 "Producer"
   text?: string // 简短介绍
+  cover?: string // 首页封面图；不写就用 media 里的第一个
   media: Media[]
   links?: { label: string, href: string }[]
 }
@@ -37,11 +42,12 @@ export const items: ArchiveItem[] = [
     number: '02',
     category: 'stories',
     label: 'Film',
-    title: 'FILM TITLE', // TODO: 片名
-    meta: 'Film Production · Shanghai', // TODO: 加年份
-    role: 'Producer',
+    title: 'MRS MILLS',
+    year: '2018',
+    role: 'Shanghai Line Producer',
     text: 'A few words about it.', // TODO
-    media: [{ type: 'image', src: '/photo/02shanghai.jpg', alt: 'Film set in Shanghai' }],
+    cover: '/photo/02shanghai.jpg',
+    media: [{ type: 'video', src: '/photo/02-making-of.mp4', poster: '/photo/02shanghai.jpg', alt: 'Making-of in Shanghai' }],
   },
   { slug: 'theatre', number: '06', category: 'stories', label: 'Theatre', title: 'THEATRE', media: [] },
   { slug: 'video-story', number: '07', category: 'stories', label: 'Video Story', title: 'VIDEO STORY', media: [] },
@@ -49,8 +55,25 @@ export const items: ArchiveItem[] = [
 
   // ---------- INTERACTIONS ----------
   {
-    slug: 'zahnihero',
+    slug: 'story-website',
     number: '03',
+    category: 'interactions',
+    label: 'Website',
+    title: 'SCROLLYTELLING WEBSITE',
+    year: '2025',
+    text: 'An interactive website that brings together illustration, photography and animation to tell the story of the changes right outside my front door.',
+    media: [{
+      type: 'site',
+      src: 'https://story.yiyun.me/',
+      preview: '/photo/03story-scroll.mp4',
+      poster: '/photo/03story-poster.jpg',
+      alt: 'Scrolling through story.yiyun.me',
+    }],
+    links: [{ label: 'Open story.yiyun.me', href: 'https://story.yiyun.me/' }],
+  },
+  {
+    slug: 'zahnihero',
+    number: '16', // 原来的 03，往后移了
     category: 'interactions',
     label: 'Interactive',
     title: 'ZAHNIHERO', // TODO: 确认标题

@@ -79,7 +79,7 @@ const { goTo } = useAnchor()
 
 .title {
   margin: 0;
-  font-size: clamp(36px, 8.5vw, 150px);
+  font-size: var(--display);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -97,10 +97,6 @@ const { goTo } = useAnchor()
   .pairs {
     flex-direction: column;
     gap: 10px;
-  }
-
-  .title {
-    font-size: 9vw;
   }
 
   .actions .btn-frame {

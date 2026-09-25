@@ -23,7 +23,7 @@ import { site } from '~/data/site'
 
 .name {
   margin: 16px 0 8vh;
-  font-size: clamp(48px, 9vw, 150px);
+  font-size: var(--display);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.02em;

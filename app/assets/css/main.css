@@ -13,7 +13,16 @@
   --gap: clamp(16px, 2vw, 32px);
   --max: 1600px;
 
+  /* 大标题字号：BEYOND ONE FRAME.、About 里的 YIYUN LIN、联系方式都用它 */
+  --display: clamp(36px, 8.5vw, 150px);
+
   /* 电脑版 / 手机版的分界：900px（写在下面的 media query 里） */
+}
+
+@media (max-width: 899px) {
+  :root {
+    --display: 9vw;
+  }
 }
 
 *,

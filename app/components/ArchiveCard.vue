@@ -7,15 +7,29 @@ const props = withDefaults(defineProps<{
   lazy?: boolean
 }>(), { caption: true, lazy: true })
 
-// 封面：第一张图片；没有图片就显示占位框
-const cover = computed(() => props.item.media.find(m => m.type === 'image'))
+// 封面：有 cover 就用 cover 图；否则用第一个媒体，网站（site）用它的录屏视频；什么都没有就显示占位框
+const cover = computed(() => {
+  if (props.item.cover) return { type: 'image' as const, src: props.item.cover }
+  const first = props.item.media[0]
+  if (first?.type === 'site') return first.preview ? { ...first, type: 'video', src: first.preview } : undefined
+  return first
+})
 </script>
 
 <template>
   <NuxtLink :to="`/archive/${item.slug}`" class="card">
     <div class="frame">
+      <video
+        v-if="cover?.type === 'video'"
+        :src="cover.src"
+        :poster="cover.poster"
+        autoplay
+        muted
+        loop
+        playsinline
+      />
       <img
-        v-if="cover"
+        v-else-if="cover"
         :src="cover.src"
         :alt="cover.alt ?? item.title"
         :loading="lazy ? 'lazy' : 'eager'"
@@ -31,11 +45,13 @@ const cover = computed(() => props.item.media.find(m => m.type === 'image'))
   display: block;
 }
 
-.frame img {
+.frame img,
+.frame video {
   transition: transform 0.8s ease, opacity 0.4s;
 }
 
-.card:hover .frame img {
+.card:hover .frame img,
+.card:hover .frame video {
   transform: scale(1.03);
 }
 

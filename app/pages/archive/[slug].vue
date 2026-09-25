@@ -17,19 +17,20 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
   <main v-if="item" class="container item">
     <a href="/#archive" class="eyebrow back" @click.prevent="goTo('archive')">← Archive</a>
 
-    <h1 class="title">{{ item.title }}</h1>
+    <!-- 顺序：标题, 年份 → 介绍 → 链接 → 图片 / 视频 / 嵌入的网站 -->
+    <h1 class="title">{{ item.title }}<template v-if="item.year">, {{ item.year }}</template></h1>
     <p v-if="item.meta" class="meta">{{ item.meta }}</p>
     <p v-if="item.role" class="meta">ROLE — {{ item.role }}</p>
-
-    <MediaViewer class="viewer" :media="item.media" :title="item.title" />
 
     <p v-if="item.text" class="text">{{ item.text }}</p>
 
     <ul v-if="item.links?.length" class="links">
       <li v-for="link in item.links" :key="link.href">
-        <a :href="link.href" target="_blank" rel="noopener">{{ link.label }} →</a>
+        <a :href="link.href" target="_blank" rel="noopener">{{ link.label }} ↗</a>
       </li>
     </ul>
+
+    <MediaViewer class="viewer" :media="item.media" :title="item.title" />
   </main>
 </template>
 
@@ -51,8 +52,8 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 }
 
 .title {
-  margin: 0 0 24px;
-  font-size: clamp(40px, 7vw, 110px);
+  margin: 0 0 12px;
+  font-size: clamp(18px, 1.4vw, 22px); /* 小标题，一进来就能看到下面的作品 */
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -66,12 +67,12 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 }
 
 .viewer {
-  margin-top: 8vh;
+  margin-top: 6vh;
 }
 
 .text {
   max-width: 680px;
-  margin: 8vh 0 0;
+  margin: 16px 0 0;
   font-size: clamp(17px, 1.35vw, 21px);
   font-weight: 300;
   line-height: 1.65;
@@ -79,14 +80,13 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 
 .links {
   list-style: none;
-  margin: 6vh 0 0;
+  margin: 16px 0 0;
   padding: 0;
 }
 
 .links a {
   font-size: 15px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
   border-bottom: 1px solid var(--line);
   padding-bottom: 4px;
 }

@@ -3,8 +3,8 @@
 // 同样的顺序，排成一列，往下滑时每块淡入
 import { categories, firstFrames, itemsIn } from '~/data/archive'
 
-// 02 上面是 ONE FRAME，03 上面是那句话，04、05 没有标题
-const titles = ['ONE FRAME', 'Exploring the digital.\nFeeling the physical.', '', '']
+// 02 上面是那句话，03、04、05 没有标题
+const titles = ['Exploring the digital.\nFeeling the physical.', '', '', '']
 const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
 </script>
 
@@ -12,7 +12,7 @@ const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
   <div class="container simple">
     <section class="steps">
       <div v-for="(step, i) in steps" :key="step.item.slug" v-reveal class="step">
-        <p v-if="step.title" class="step-title" :class="{ phrase: i === 1 }">{{ step.title }}</p>
+        <p v-if="step.title" class="step-title" :class="{ phrase: i === 0 }">{{ step.title }}</p>
         <ArchiveCard :item="step.item" :caption="false" />
       </div>
     </section>
