@@ -1,0 +1,128 @@
+/* ---------- 全站变量 ---------- */
+:root {
+  --bg: #000;
+  --fg: #ededea;
+  --muted: #8a8a86;
+  --line: rgba(237, 237, 234, 0.35);
+  --placeholder: #1a1a1a;
+
+  --font: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+
+  /* 页面左右留白、四栏之间的间距 */
+  --pad: clamp(20px, 4vw, 64px);
+  --gap: clamp(16px, 2vw, 32px);
+  --max: 1600px;
+
+  /* 电脑版 / 手机版的分界：900px（写在下面的 media query 里） */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 内容最大宽度 + 左右留白 */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+/* 小号大写字（分类名、说明文字） */
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* 线框按钮：[ ABOUT ME → ] */
+.btn-frame {
+  display: inline-block;
+  padding: 14px 22px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-frame:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* 16:9 图片框：所有 Archive 图片都用这个比例 */
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--placeholder);
+}
+
+.frame img,
+.frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 往下滑时淡入（配合 v-reveal 指令） */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
