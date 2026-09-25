@@ -22,19 +22,31 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
     <p v-if="item.meta" class="meta">{{ item.meta }}</p>
     <p v-if="item.role" class="meta">ROLE — {{ item.role }}</p>
 
-    <p v-if="item.text" class="text">{{ item.text }}</p>
+    <!-- 用 CSS order 调换 介绍 和 链接 的先后：linksFirst 时链接在上 -->
+    <div class="body" :class="{ 'links-first': item.linksFirst }">
+      <p v-if="item.text" class="text">{{ item.text }}</p>
 
-    <ul v-if="item.links?.length" class="links">
-      <li v-for="link in item.links" :key="link.href">
-        <a :href="link.href" target="_blank" rel="noopener">{{ link.label }} ↗</a>
-      </li>
-    </ul>
+      <ul v-if="item.links?.length" class="links">
+        <li v-for="link in item.links" :key="link.href">
+          <a :href="link.href" target="_blank" rel="noopener">{{ link.label }} ↗</a>
+        </li>
+      </ul>
+    </div>
 
     <MediaViewer class="viewer" :media="item.media" :title="item.title" />
   </main>
 </template>
 
 <style scoped>
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.links-first .links {
+  order: -1;
+}
+
 .item {
   max-width: 1280px;
   padding-top: 140px;
@@ -61,7 +73,7 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 
 .meta {
   margin: 0 0 6px;
-  font-size: 15px;
+  font-size: var(--small);
   letter-spacing: 0.08em;
   color: var(--muted);
 }
@@ -71,11 +83,10 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 }
 
 .text {
-  max-width: 680px;
+  max-width: 600px;
   margin: 16px 0 0;
-  font-size: clamp(17px, 1.35vw, 21px);
-  font-weight: 300;
-  line-height: 1.65;
+  font-size: var(--small);
+  line-height: 1.7;
 }
 
 .links {
@@ -85,7 +96,7 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 }
 
 .links a {
-  font-size: 15px;
+  font-size: var(--small);
   letter-spacing: 0.08em;
   border-bottom: 1px solid var(--line);
   padding-bottom: 4px;

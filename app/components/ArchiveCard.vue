@@ -7,10 +7,12 @@ const props = withDefaults(defineProps<{
   lazy?: boolean
 }>(), { caption: true, lazy: true })
 
-// 封面：有 cover 就用 cover 图；否则用第一个媒体，网站（site）用它的录屏视频；什么都没有就显示占位框
+// 封面：有 coverVideo 就用动态封面（cover 图当加载前的画面）；有 cover 就用 cover 图；否则用第一个媒体，网站（site）用它的录屏视频；什么都没有就显示占位框
 const cover = computed(() => {
+  if (props.item.coverVideo) return { type: 'video' as const, src: props.item.coverVideo, poster: props.item.cover }
   if (props.item.cover) return { type: 'image' as const, src: props.item.cover }
   const first = props.item.media[0]
+  if (first?.type === 'youtube') return { type: 'image' as const, src: `https://i.ytimg.com/vi/${first.src}/hqdefault.jpg` }
   if (first?.type === 'site') return first.preview ? { ...first, type: 'video', src: first.preview } : undefined
   return first
 })
@@ -61,13 +63,13 @@ const cover = computed(() => {
   display: grid;
   place-items: center;
   color: #444;
-  font-size: 14px;
+  font-size: var(--label);
   letter-spacing: 0.2em;
 }
 
 .card-caption {
   margin: 12px 0 0;
-  font-size: 15px;
+  font-size: var(--small);
   color: var(--fg);
 }
 </style>

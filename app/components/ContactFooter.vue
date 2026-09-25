@@ -31,10 +31,10 @@ import { site } from '~/data/site'
 }
 
 .links a {
-  font-size: var(--display);
+  font-size: var(--logo);
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 2;
+  letter-spacing: 0.12em;
   transition: color 0.3s;
 }
 
@@ -45,7 +45,7 @@ import { site } from '~/data/site'
 .bottom {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: var(--label);
   letter-spacing: 0.15em;
   color: var(--muted);
 }

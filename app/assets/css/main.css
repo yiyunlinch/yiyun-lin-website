@@ -13,8 +13,15 @@
   --gap: clamp(16px, 2vw, 32px);
   --max: 1600px;
 
-  /* 大标题字号：BEYOND ONE FRAME.、About 里的 YIYUN LIN、联系方式都用它 */
+  /* 大标题字号：BEYOND ONE FRAME. */
   --display: clamp(36px, 8.5vw, 150px);
+
+  /* 左上角 YIYUN LIN 的字号：About 里的 YIYUN LIN、联系方式也用它 */
+  --logo: clamp(16px, 1.4vw, 20px);
+  /* 小字：正文、ROLE、链接、Archive 格子下的字，全站统一 */
+  --small: 15px;
+  /* 标签：ARCHIVE、ABOUT ME 这类大写小标签和按钮 */
+  --label: 13px;
 
   /* 电脑版 / 手机版的分界：900px（写在下面的 media query 里） */
 }
@@ -75,7 +82,7 @@ button {
 
 /* 小号大写字（分类名、说明文字） */
 .eyebrow {
-  font-size: 13px;
+  font-size: var(--label);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
@@ -86,7 +93,7 @@ button {
   display: inline-block;
   padding: 14px 22px;
   border: 1px solid var(--line);
-  font-size: 14px;
+  font-size: var(--label);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   transition: background 0.3s, color 0.3s;

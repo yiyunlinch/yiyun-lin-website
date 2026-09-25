@@ -55,6 +55,24 @@ function armFrame() {
   frameReady.value = true
 }
 
+// 视频点进来就自动播放。浏览器有时不允许有声音的自动播放（比如直接打开网址），
+// 那就先静音播放，用户可以在控制条里打开声音
+const videoEl = ref<HTMLVideoElement>()
+async function autoplay() {
+  await nextTick()
+  const v = videoEl.value
+  if (!v) return
+  try {
+    await v.play()
+  }
+  catch {
+    v.muted = true
+    v.play().catch(() => {})
+  }
+}
+watch(current, autoplay)
+onMounted(autoplay)
+
 const userEvents = ['wheel', 'touchmove', 'keydown', 'pointerdown'] as const
 onMounted(() => {
   desktopQuery = window.matchMedia('(min-width: 900px)')
@@ -93,15 +111,24 @@ onBeforeUnmount(() => {
           playsinline
         />
       </template>
+      <!-- YouTube：自动播放。浏览器规定自动播放要静音，点播放器的喇叭开声音 -->
+      <iframe
+        v-else-if="current?.type === 'youtube'"
+        :key="current.src"
+        :src="`https://www.youtube-nocookie.com/embed/${current.src}?autoplay=1&mute=1&playsinline=1&rel=0`"
+        :title="current.alt ?? title"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowfullscreen
+      />
       <template v-else-if="current">
         <video
           v-if="current.type === 'video'"
+          ref="videoEl"
           :key="current.src"
           :src="current.src"
           :poster="current.poster"
           controls
           playsinline
-          preload="metadata"
         />
         <img v-else :key="current.src" :src="current.src" :alt="current.alt ?? title">
       </template>
@@ -144,7 +171,7 @@ onBeforeUnmount(() => {
 
 .placeholder {
   color: #444;
-  font-size: 14px;
+  font-size: var(--label);
   letter-spacing: 0.2em;
 }
 
@@ -158,7 +185,7 @@ onBeforeUnmount(() => {
   gap: 32px;
   padding: 6px 18px;
   background: rgba(0, 0, 0, 0.55);
-  font-size: 14px;
+  font-size: var(--label);
   letter-spacing: 0.15em;
 }
 

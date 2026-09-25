@@ -19,7 +19,7 @@ export default <RouterConfig>{
 
     if (to.hash) {
       const el = findAnchor(to.hash.slice(1))
-      if (el) return { el }
+      if (el) return { el, behavior: 'instant' }
     }
 
     return { top: 0 }

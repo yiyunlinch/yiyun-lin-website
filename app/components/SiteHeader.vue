@@ -70,7 +70,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 .logo,
 .dots {
   pointer-events: auto;
-  font-size: clamp(16px, 1.4vw, 20px);
+  font-size: var(--logo);
   font-weight: 500;
   letter-spacing: 0.12em;
 }

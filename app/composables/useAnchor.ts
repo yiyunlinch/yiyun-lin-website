@@ -11,11 +11,12 @@ export function useAnchor() {
 
   function goTo(name: string) {
     if (route.path === '/') {
+      // instant：直接跳过去，不从上往下一路滚过整个页面
       if (name === 'home') {
-        window.scrollTo({ top: 0 })
+        window.scrollTo({ top: 0, behavior: 'instant' })
       }
       else {
-        findAnchor(name)?.scrollIntoView()
+        findAnchor(name)?.scrollIntoView({ behavior: 'instant' })
       }
       history.replaceState(history.state, '', name === 'home' ? '/' : `/#${name}`)
     }
