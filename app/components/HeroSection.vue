@@ -27,8 +27,8 @@ const { goTo } = useAnchor()
       <h1 class="title">BEYOND ONE FRAME.</h1>
 
       <div class="actions">
-        <a href="/#about" class="btn-frame" @click.prevent="goTo('about')">About me →</a>
         <a href="/#archive" class="btn-frame" @click.prevent="goTo('archive')">Archive ↓</a>
+        <a href="/#about" class="btn-frame" @click.prevent="goTo('about')">About me →</a>
       </div>
     </div>
   </section>
@@ -70,7 +70,9 @@ const { goTo } = useAnchor()
 
 .pairs {
   display: flex;
-  gap: clamp(24px, 5vw, 96px);
+  gap: 2em; /* 三组之间大约两个全角空格，整体留在左边 60% 以内 */
+  max-width: 62%;
+  color: var(--fg-2);
   margin: 0 0 4vh;
   font-size: clamp(14px, 1.5vw, 22px);
   letter-spacing: 0.12em;
@@ -78,9 +80,9 @@ const { goTo } = useAnchor()
 }
 
 .title {
-  margin: 0;
+  margin: 24px 0 0; /* 比原来稍微往下 */
   font-size: var(--display);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -92,11 +94,27 @@ const { goTo } = useAnchor()
   margin-top: auto;
 }
 
+/* 按钮：边框更淡、更细，不像传统按钮 */
+.actions .btn-frame {
+  padding: 11px 18px;
+  border-color: rgba(242, 240, 234, 0.2);
+  border-width: 0.5px;
+  color: var(--fg-2);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.actions .btn-frame:hover {
+  background: none;
+  border-color: rgba(242, 240, 234, 0.6);
+  color: var(--fg);
+}
+
 /* 手机：三组词改成三行 */
 @media (max-width: 899px) {
   .pairs {
     flex-direction: column;
     gap: 10px;
+    max-width: none;
   }
 
   .actions .btn-frame {

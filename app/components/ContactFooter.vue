@@ -21,7 +21,7 @@ import { site } from '~/data/site'
 .footer {
   padding-top: 16vh;
   padding-bottom: 32px;
-  border-top: 1px solid rgba(237, 237, 234, 0.12);
+  border-top: 1px solid rgba(242, 240, 234, 0.12);
 }
 
 .links {

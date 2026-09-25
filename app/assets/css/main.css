@@ -1,9 +1,10 @@
 /* ---------- 全站变量 ---------- */
 :root {
   --bg: #000;
-  --fg: #ededea;
+  --fg: #f2f0ea; /* 稍微偏暖的白 */
+  --fg-2: rgba(242, 240, 234, 0.72); /* 次要文字 */
   --muted: #8a8a86;
-  --line: rgba(237, 237, 234, 0.35);
+  --line: rgba(242, 240, 234, 0.35);
   --placeholder: #1a1a1a;
 
   --font: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
@@ -14,7 +15,7 @@
   --max: 1600px;
 
   /* 大标题字号：BEYOND ONE FRAME. */
-  --display: clamp(36px, 8.5vw, 150px);
+  --display: clamp(30px, 7vw, 124px); /* 原来 8.5vw，缩小约 18% */
 
   /* 左上角 YIYUN LIN 的字号：About 里的 YIYUN LIN、联系方式也用它 */
   --logo: clamp(16px, 1.4vw, 20px);
@@ -28,7 +29,7 @@
 
 @media (max-width: 899px) {
   :root {
-    --display: 9vw;
+    --display: 7.5vw;
   }
 }
 

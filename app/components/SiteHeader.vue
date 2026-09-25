@@ -30,12 +30,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   <header class="header">
     <a href="/" class="logo" @click.prevent="select('home')">YIYUN LIN</a>
     <button
-      class="dots"
+      class="menu-btn"
       :aria-expanded="open"
       :aria-label="open ? 'Close menu' : 'Open menu'"
       @click="open = !open"
     >
-      {{ open ? '×' : '•••' }}
+      {{ open ? 'CLOSE ×' : 'MENU ↗' }}
     </button>
   </header>
 
@@ -68,18 +68,30 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 }
 
 .logo,
-.dots {
+.menu-btn {
   pointer-events: auto;
+}
+
+.logo {
   font-size: var(--logo);
   font-weight: 500;
   letter-spacing: 0.12em;
 }
 
-.dots {
+.menu-btn {
   min-width: 44px;
   min-height: 44px;
-  letter-spacing: 0.2em;
   text-align: right;
+  white-space: nowrap;
+  /* 和首页 ABOUT ME 按钮的字一样 */
+  font-size: var(--label);
+  letter-spacing: 0.15em;
+  color: var(--fg-2);
+  transition: color 0.3s;
+}
+
+.menu-btn:hover {
+  color: var(--fg);
 }
 
 .menu {
