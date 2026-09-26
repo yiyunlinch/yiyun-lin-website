@@ -19,7 +19,7 @@ const cover = computed(() => {
 </script>
 
 <template>
-  <NuxtLink :to="`/archive/${item.slug}`" class="card">
+  <NuxtLink :to="`/archive/${item.slug}`" class="card" :data-cat="item.category">
     <div class="frame">
       <video
         v-if="cover?.type === 'video'"
@@ -67,9 +67,15 @@ const cover = computed(() => {
   letter-spacing: 0.2em;
 }
 
+/* 卡片文字用这个大类深一点的颜色，鼠标移上去变成标题的浅色 */
 .card-caption {
   margin: 12px 0 0;
   font-size: var(--small);
-  color: var(--fg);
+  color: var(--cat-deep, var(--fg));
+  transition: color 0.3s;
+}
+
+.card:hover .card-caption {
+  color: var(--cat-light, var(--fg));
 }
 </style>

@@ -21,7 +21,7 @@ const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
       <h2 class="archive-title">ARCHIVE</h2>
 
       <div v-for="cat in categories" :key="cat.key" class="category">
-        <h3 class="eyebrow">{{ cat.title }}</h3>
+        <h3 class="cat-title" :data-cat="cat.key">{{ cat.title }} <span class="tagline">— {{ cat.tagline }}</span></h3>
         <ArchiveCard v-for="item in itemsIn(cat.key)" :key="item.slug" v-reveal :item="item" />
       </div>
     </section>

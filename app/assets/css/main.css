@@ -89,6 +89,33 @@ button {
   color: var(--muted);
 }
 
+/* 每个大类一个颜色：标题用浅色，下面卡片的文字用同色系深一点的
+   写了 data-cat="productions" 的元素（和它里面的）就用这一组颜色 */
+[data-cat="productions"] { --cat-light: #f2e6b8; --cat-deep: #c9b572; }
+[data-cat="stories"] { --cat-light: #c4d6ec; --cat-deep: #8aa3c4; }
+[data-cat="interactions"] { --cat-light: #c8e4cc; --cat-deep: #8db595; }
+[data-cat="experiences"] { --cat-light: #f0cfc4; --cat-deep: #c99383; }
+
+/* 首页四个大类的名字：和项目页面的标题一样大 */
+.cat-title {
+  margin: 0;
+  font-size: clamp(18px, 1.4vw, 22px);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cat-light, var(--fg));
+}
+
+/* 大类名字后面的小字：STORIES — I tell.（白色） */
+.cat-title .tagline {
+  margin-left: 0.3em;
+  font-size: 0.75em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--fg);
+}
+
 /* 线框按钮：[ ABOUT ME → ] */
 .btn-frame {
   display: inline-block;

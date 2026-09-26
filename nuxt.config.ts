@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false }, // 开发时页面底部的 Nuxt 小按钮；要用再改成 true
 
   css: ['~/assets/css/main.css'],
 

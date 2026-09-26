@@ -127,7 +127,8 @@ onBeforeUnmount(() => {
             class="cell"
             :style="{ opacity: frameOpacity(i) }"
           >
-            <p class="eyebrow label">{{ categories[i]!.title }}</p>
+            <!-- 第一个大类名（PRODUCTIONS）等第二格出现时才一起出现，第二页上只有图 -->
+            <p class="cat-title label" :data-cat="categories[i]!.key" :style="i === 0 ? { opacity: frameOpacity(1) } : undefined">{{ categories[i]!.title }} <span class="tagline">— {{ categories[i]!.tagline }}</span></p>
             <ArchiveCard :item="item" :lazy="false" />
           </div>
         </div>
@@ -222,12 +223,12 @@ onBeforeUnmount(() => {
   will-change: transform;
 }
 
+/* 大类名跟着自己那一格一起出现（格子的透明度） */
 .label {
   margin: 0 0 14px;
-  opacity: var(--archive);
 }
 
-/* 分类名和小字在最后和 ARCHIVE 一起出现 */
+/* 卡片下面的小字在最后和 ARCHIVE 一起出现 */
 .cell :deep(.card-caption) {
   opacity: var(--archive);
 }

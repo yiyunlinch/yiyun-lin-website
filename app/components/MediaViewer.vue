@@ -3,7 +3,8 @@
 import type { Media } from '~/data/archive'
 
 // ratio：画框的比例，默认 16:9；左右两个窗口时照片那边用 4:3
-const props = defineProps<{ media: Media[], title: string, ratio?: string }>()
+// autoplay：YouTube 自动播放；一页有好几个视频时，只有第一个自动播放
+const props = withDefaults(defineProps<{ media: Media[], title: string, ratio?: string, autoplay?: boolean }>(), { autoplay: true })
 
 const index = ref(0)
 const count = computed(() => props.media.length)
@@ -93,7 +94,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="viewer" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
-    <div class="frame">
+    <div class="box">
     <div class="stage" :style="ratio ? { aspectRatio: ratio } : undefined">
       <template v-if="current?.type === 'site'">
         <iframe
@@ -117,7 +118,7 @@ onBeforeUnmount(() => {
       <iframe
         v-else-if="current?.type === 'youtube'"
         :key="current.src"
-        :src="`https://www.youtube-nocookie.com/embed/${current.src}?autoplay=1&mute=1&playsinline=1&rel=0&start=${current.start ?? 0}`"
+        :src="`https://www.youtube-nocookie.com/embed/${current.src}?autoplay=${props.autoplay ? 1 : 0}&mute=1&playsinline=1&rel=0&start=${current.start ?? 0}`"
         :title="current.alt ?? title"
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
         allowfullscreen
@@ -152,7 +153,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.frame {
+.box {
   position: relative;
   background: #0b0b0b;
 }

@@ -2,7 +2,7 @@
 // 加新作品：在 items 里加一条；有了图片就放进 public/photo/，再写进 media。
 // media 为空时，网站会显示灰色占位框。
 
-export type CategoryKey = 'stories' | 'interactions' | 'objects' | 'explorations'
+export type CategoryKey = 'stories' | 'productions' | 'interactions' | 'experiences'
 
 export interface Media {
   // site = 嵌入一个网站：电脑上可以直接在页面里浏览，手机上显示 preview 视频
@@ -35,15 +35,28 @@ export interface ArchiveItem {
   coverVideo?: string // 动态封面（静音循环播放），这时 cover 当加载前显示的图
   media: Media[]
   mediaRight?: Media[] // 有的话：左边 media（照片，4:3），右边这个（视频，16:9），同样高
+  leftRatio?: number // 左边画框的宽高比，默认 4 / 3；海报用 2 / 3（海报会填满画框，上下边和视频对齐）
   links?: { label: string, href: string }[]
   linksFirst?: boolean // true = 链接放在介绍文字上面
+  parts?: Part[] // 有的话：页面上从上往下排这几段（链接都在介绍上面），代替上面的 text / media
 }
 
-export const categories: { key: CategoryKey, title: string }[] = [
-  { key: 'stories', title: 'STORIES' },
-  { key: 'interactions', title: 'INTERACTIONS' },
-  { key: 'objects', title: 'OBJECTS' },
-  { key: 'explorations', title: 'EXPLORATIONS' },
+// 一个作品页里上下排好几段，每段有自己的标题、介绍、链接和视频
+export interface Part {
+  title: string
+  year?: string
+  place?: string
+  text?: string
+  media: Media[]
+  links?: { label: string, href: string }[]
+}
+
+// tagline：大类名字后面的小字
+export const categories: { key: CategoryKey, title: string, tagline: string }[] = [
+  { key: 'productions', title: 'PRODUCTIONS', tagline: 'I produce.' },
+  { key: 'stories', title: 'STORIES', tagline: 'I tell.' },
+  { key: 'interactions', title: 'INTERACTIONS', tagline: 'I design.' },
+  { key: 'experiences', title: 'EXPERIENCES', tagline: 'I enjoy.' },
 ]
 
 export const items: ArchiveItem[] = [
@@ -51,49 +64,63 @@ export const items: ArchiveItem[] = [
   {
     slug: 'shanghai-film',
     number: '02',
-    category: 'stories',
-    label: 'Feature Film Line Producer', // STORIES 下面的小字写身份
-    title: 'MRS MILLS · COFFEE · MAGIC 7', // 浏览器标签页上的名字；页面上显示下面的 works
+    category: 'productions',
+    label: 'Feature Film Line Producer', // 格子下面的小字写身份
+    title: 'MAGIC 7 · MRS MILLS · CAFFÈ', // 浏览器标签页上的名字；页面上显示下面的 works
     works: [
       { title: 'MAGIC 7', year: '2023', place: '' },
-      { title: 'COFFEE', year: '2019', place: '' },
       { title: 'MRS MILLS', year: '2018', place: '' },
+      { title: 'CAFFÈ', year: '2016', place: '' },
       { title: 'ENTER THE WARRIORS GATE', year: '2016', place: '' },
       { title: 'VOYAGE EN CHINE', year: '2015', place: '' },
     ],
     role: 'China Line Producer',
     cover: '/photo/02shanghai.jpg',
-    media: [{ type: 'video', src: '/photo/02-making-of.mp4', poster: '/photo/02shanghai.jpg', alt: 'Making-of in Shanghai', caption: 'Mrs Mills — behind the scenes' }],
+    // 海报顺序和上面的片名一样
+    media: [
+      { type: 'image', src: '/photo/posters/magic7.jpg', alt: 'Magic 7 poster' },
+      { type: 'image', src: '/photo/posters/mrs-mills.jpg', alt: 'Mrs Mills poster' },
+      { type: 'image', src: '/photo/posters/caffe.jpg', alt: 'Caffè poster' },
+      { type: 'image', src: '/photo/posters/warriors-gate.jpg', alt: 'Enter the Warriors Gate poster' },
+      { type: 'image', src: '/photo/posters/voyage-en-chine.jpg', alt: 'Voyage en Chine poster' },
+    ],
+    leftRatio: 2 / 3,
+    mediaRight: [{ type: 'video', src: '/photo/02-making-of.mp4', poster: '/photo/02shanghai.jpg', alt: 'Making-of in Shanghai', caption: 'Mrs Mills — behind the scenes' }],
   },
   {
-    slug: 'camp-ghulja',
+    slug: 'video-journalism',
     number: '06',
     category: 'stories',
     label: 'Video Journalist',
-    title: 'CAMP ON THE ROAD TO GHULJA',
-    year: '2025',
-    place: 'NETHERLANDS', // 在阿姆斯特丹 Jan 的工作室采访
+    title: 'MEINIG ZELLT · CAMP ON THE ROAD TO GHULJA · ONE YEAR POST-GOOGLE', // 浏览器标签页上的名字
     role: 'Video Journalist',
-    text: 'An interview with artist Jan Rothuizen about Camp on the Road to Ghulja, an investigation that mapped a detention camp in Xinjiang without ever setting foot in China.',
     cover: '/photo/06camp-ghulja-poster.jpg',
-    coverVideo: '/photo/06camp-ghulja.mp4', // 视频 6:39–7:01，盖掉了字幕
-    media: [{ type: 'youtube', src: 'PzBxUmOqhi4', alt: 'Jan Interview: Camp on the road to Ghulja' }],
-    links: [{ label: 'www.digezz.ch/jan-rothuizen-interview', href: 'https://www.digezz.ch/jan-rothuizen-interview-camp-on-the-road-to-ghulja-mongolkure/' }],
-    linksFirst: true,
-  },
-  {
-    slug: 'meinig-zellt',
-    number: '07',
-    category: 'stories',
-    label: 'Video Journalist',
-    title: 'MEINIG ZELLT',
-    year: '2025',
-    role: 'Video Journalist',
-    text: 'Glarus is currently the only canton in Switzerland with a Landsgemeinde where voters can put forward proposals directly.',
-    cover: '/photo/07meinig-zellt.jpg',
-    media: [{ type: 'youtube', src: 'WNhWY8ijwR8', alt: 'Meinig zellt' }],
-    links: [{ label: 'www.digezz.ch/meinig-zellt', href: 'https://www.digezz.ch/meinig-zellt/' }],
-    linksFirst: true,
+    coverVideo: '/photo/06camp-ghulja.mp4', // Jan 的动画，视频 6:39–7:01，盖掉了字幕
+    media: [],
+    parts: [
+      {
+        title: 'MEINIG ZELLT',
+        year: '2025',
+        text: 'Glarus is currently the only canton in Switzerland with a Landsgemeinde where voters can put forward proposals directly.',
+        media: [{ type: 'youtube', src: 'WNhWY8ijwR8', alt: 'Meinig zellt' }],
+        links: [{ label: 'www.digezz.ch/meinig-zellt', href: 'https://www.digezz.ch/meinig-zellt/' }],
+      },
+      {
+        title: 'CAMP ON THE ROAD TO GHULJA',
+        year: '2025',
+        place: 'NETHERLANDS', // 在阿姆斯特丹 Jan 的工作室采访
+        text: 'An interview with artist Jan Rothuizen about Camp on the Road to Ghulja, an investigation that mapped a detention camp in Xinjiang without ever setting foot in China.',
+        media: [{ type: 'youtube', src: 'PzBxUmOqhi4', alt: 'Jan Interview: Camp on the road to Ghulja' }],
+        links: [{ label: 'www.digezz.ch/jan-rothuizen-interview', href: 'https://www.digezz.ch/jan-rothuizen-interview-camp-on-the-road-to-ghulja-mongolkure/' }],
+      },
+      {
+        title: 'ONE YEAR POST-GOOGLE: THE PEOPLE BEHIND THE HEADLINES',
+        year: '2025',
+        text: 'What happened to our friends in Zurich who were laid off from Google in early 2024? A small glimpse into the everyday lives of the tech community in Zurich.',
+        media: [{ type: 'youtube', src: 'o9XIO8pXwz8', alt: 'One Year Post-Google' }],
+        links: [{ label: 'www.digezz.ch/one-year-post-google', href: 'https://www.digezz.ch/one-year-post-google-the-people-behind-the-headlines/' }],
+      },
+    ],
   },
   {
     slug: 'one-founder-one-venture',
@@ -133,6 +160,7 @@ export const items: ArchiveItem[] = [
     }],
     links: [{ label: 'Open story.yiyun.me', href: 'https://story.yiyun.me/' }],
   },
+  { slug: 'maxibox', number: '09', category: 'interactions', label: 'Maxibox Creator', title: 'MAXIBOX', role: 'Maxibox Creator', media: [] },
   {
     slug: 'zahnihero',
     number: '16', // 原来的 03，往后移了
@@ -147,47 +175,13 @@ export const items: ArchiveItem[] = [
     links: [{ label: 'github.com/yiyunlinch/zahnihero', href: 'https://github.com/yiyunlinch/zahnihero' }],
     linksFirst: true,
   },
-  { slug: 'interactive', number: '09', category: 'interactions', label: 'Interactive', title: 'INTERACTIVE', media: [] },
-  { slug: 'ai-experiment', number: '10', category: 'interactions', label: 'AI Experiment', title: 'AI EXPERIMENT', media: [] },
 
   // ---------- OBJECTS ----------
-  {
-    slug: 'simpsons-tv',
-    number: '04',
-    category: 'objects',
-    label: 'Handmade',
-    title: 'THE SIMPSONS TV', // TODO: 确认标题
-    meta: 'Handmade Object',
-    text: 'A few words about it.', // TODO
-    media: [{ type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' }],
-  },
-  { slug: 'book-print', number: '11', category: 'objects', label: 'Book / Print', title: 'BOOK / PRINT', media: [] },
-  { slug: 'object', number: '12', category: 'objects', label: 'Object', title: 'OBJECT', media: [] },
-
-  // ---------- EXPLORATIONS ----------
-  {
-    slug: 'exploration',
-    number: '05',
-    category: 'explorations',
-    label: 'Contemporary Theatre Performer, Workshop Leader',
-    title: 'MEAT I · MEAT II · CLEANSING', // 浏览器标签页上的名字；页面上显示下面的 works
-    works: [
-      { title: 'MEAT I', titleZh: '《肉I》', year: '2017' },
-      { title: 'MEAT II: NIAOLYMPICS PART 2', titleZh: '《肉II》“白日夜话：被子下面”', year: '2018' },
-      { title: 'CLEANSING: NIAONIAO MORNING CALL', titleZh: '《清洁》“嬲嬲早会”', year: '2018' },
-    ],
-    role: 'Contemporary Theatre Performer, Workshop Leader',
-    cover: '/photo/05explore.jpg',
-    media: [
-      { type: 'image', src: '/photo/performer/t1.jpg', alt: 'Leading a morning workshop' },
-      { type: 'image', src: '/photo/performer/t3.jpg', alt: 'Workshop on the theatre floor' },
-    ],
-    mediaRight: [{ type: 'youtube', src: 'Efs4PtVbWjc', start: 4, alt: 'MEAT / CLEANSING' }],
-  },
+  { slug: 'book-print', number: '11', category: 'experiences', label: 'Artist Book Maker', title: 'BOOK / PRINT', role: 'Artist Book Maker', media: [] },
   {
     slug: 'yoga',
     number: '13',
-    category: 'explorations',
+    category: 'experiences',
     label: 'Yogi, TTC 500 Certified Teacher',
     title: 'YOGA JOURNEY',
     year: '2018 – NOW',
@@ -210,9 +204,43 @@ export const items: ArchiveItem[] = [
     links: [{ label: 'inteyoga.org/teacher', href: 'https://inteyoga.org/teacher/' }],
   },
   {
+    slug: 'simpsons-tv',
+    number: '04',
+    category: 'experiences',
+    label: 'Handmade',
+    title: 'THE SIMPSONS TV', // TODO: 确认标题
+    meta: 'Handmade Object',
+    text: 'A few words about it.', // TODO
+    media: [{ type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' }],
+  },
+  { slug: 'object', number: '12', category: 'experiences', label: 'Object', title: 'OBJECT', media: [] },
+
+  // ---------- EXPLORATIONS ----------
+  {
+    slug: 'exploration',
+    number: '05',
+    category: 'productions',
+    label: 'Contemporary Theatre Performer, Workshop Leader',
+    title: 'MEAT I · MEAT II · CLEANSING', // 浏览器标签页上的名字；页面上显示下面的 works
+    works: [
+      { title: 'MEAT I', titleZh: '《肉I》', year: '2017' },
+      { title: 'MEAT II: NIAOLYMPICS PART 2', titleZh: '《肉II》“白日夜话：被子下面”', year: '2018' },
+      { title: 'CLEANSING: NIAONIAO MORNING CALL', titleZh: '《清洁》“嬲嬲早会”', year: '2018' },
+    ],
+    role: 'Contemporary Theatre Performer, Workshop Leader',
+    cover: '/photo/05explore.jpg',
+    media: [
+      { type: 'image', src: '/photo/performer/t1.jpg', alt: 'Leading a morning workshop' },
+      { type: 'image', src: '/photo/performer/t3.jpg', alt: 'Workshop on the theatre floor' },
+    ],
+    mediaRight: [{ type: 'youtube', src: 'Efs4PtVbWjc', start: 4, alt: 'MEAT / CLEANSING' }],
+  },
+  // 内容待补充
+  { slug: 'dance-festival', number: '18', category: 'productions', label: 'Dance Festival Curator', title: 'DANCE FESTIVAL', role: 'Dance Festival Curator', media: [] },
+  {
     slug: 'snow-camp',
     number: '17',
-    category: 'explorations',
+    category: 'experiences',
     label: 'Snow Cave Digger, Sleeper & Camera',
     title: '-10°C NIGHTS',
     year: '2020',
@@ -232,12 +260,10 @@ export const items: ArchiveItem[] = [
     ],
     mediaRight: [{ type: 'youtube', src: 'oZ3RcSFZL90', alt: 'Snow Camping New Year 2020' }],
   },
-  { slug: 'research', number: '14', category: 'explorations', label: 'Research', title: 'RESEARCH', media: [] },
-  { slug: 'life-experiment', number: '15', category: 'explorations', label: 'Life / Experiment', title: 'LIFE / EXPERIMENT', media: [] },
 ]
 
-// 滚动动画用的四张图：02 03 04 05
-export const firstFrames = ['02', '03', '04', '05'].map(n => items.find(i => i.number === n)!)
+// 滚动动画用的四张图：每个大类的第一个作品
+export const firstFrames = categories.map(c => items.find(i => i.category === c.key)!)
 
 // 地点跟着年份：2019 年以前在中国，之后在瑞士；item 写了 place 就用 place
 export function placeOf(year?: string, place?: string) {

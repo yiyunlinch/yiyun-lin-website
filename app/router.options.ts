@@ -22,6 +22,6 @@ export default <RouterConfig>{
       if (el) return { el, behavior: 'instant' }
     }
 
-    return { top: 0 }
+    return { top: 0, behavior: 'instant' }
   },
 }
