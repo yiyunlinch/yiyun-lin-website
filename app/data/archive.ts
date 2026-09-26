@@ -179,7 +179,15 @@ export const items: ArchiveItem[] = [
   },
 
   // ---------- OBJECTS ----------
-  { slug: 'book-print', number: '11', category: 'experiences', label: 'Artist Book Maker', title: 'BOOK / PRINT', role: 'Artist Book Maker', media: [] },
+  {
+    slug: 'book-print',
+    number: '11',
+    category: 'experiences',
+    label: 'Artist Book Maker',
+    title: 'BOOK / PRINT',
+    role: 'Artist Book Maker',
+    media: [{ type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' }],
+  },
   {
     slug: 'yoga',
     number: '13',
@@ -205,17 +213,6 @@ export const items: ArchiveItem[] = [
     mediaRight: [{ type: 'video', src: '/photo/yoga/yoga-video.mp4', poster: '/photo/yoga/yoga-video-poster.jpg', alt: 'Headstand by the lake' }],
     links: [{ label: 'inteyoga.org/teacher', href: 'https://inteyoga.org/teacher/' }],
   },
-  {
-    slug: 'simpsons-tv',
-    number: '04',
-    category: 'experiences',
-    label: 'Handmade',
-    title: 'THE SIMPSONS TV', // TODO: 确认标题
-    meta: 'Handmade Object',
-    text: 'A few words about it.', // TODO
-    media: [{ type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' }],
-  },
-  { slug: 'object', number: '12', category: 'experiences', label: 'Object', title: 'OBJECT', media: [] },
 
   // ---------- EXPLORATIONS ----------
   {
@@ -237,18 +234,39 @@ export const items: ArchiveItem[] = [
     ],
     mediaRight: [{ type: 'youtube', src: 'Efs4PtVbWjc', start: 4, alt: 'MEAT / CLEANSING' }],
   },
-  // 内容待补充
-  { slug: 'dance-festival', number: '18', category: 'productions', label: 'Dance Festival Curator', title: 'DANCE FESTIVAL', role: 'Dance Festival Curator', media: [] },
+  {
+    slug: 'dance-festival',
+    number: '18',
+    category: 'productions',
+    label: 'Dance Festival Curator',
+    title: 'SHANGHAI FRINGE FESTIVAL\nDANS STORM FESTIVAL', // \n = 换行
+    year: '2010 – 2014',
+    place: 'CHINA',
+    role: 'Dance Festival Curator',
+    text: 'Sixteen years ago, I organised avant-garde dance festivals in China. Today, I bring my daughter along to find the artists I once worked with, and we dance together.',
+    cover: '/photo/theater/maxidance-poster.jpg',
+    coverVideo: '/photo/theater/maxidance-cover.mp4', // 视频 1:07–1:17，女儿看大家跳舞
+    // 左边照片：当年的艺术节 → 现在带女儿
+    media: [
+      { type: 'image', src: '/photo/theater/festival1.jpg', alt: 'At the festival' },
+      { type: 'image', src: '/photo/theater/festival4.jpg', alt: 'Performance at the festival' },
+      { type: 'image', src: '/photo/theater/festival2.jpg', alt: 'Performers on stage' },
+      { type: 'image', src: '/photo/theater/festival5.jpg', alt: 'My daughter watching the dancers' },
+      { type: 'image', src: '/photo/theater/festival3.jpg', alt: 'My daughter with the artists' },
+    ],
+    leftRatio: 16 / 9,
+    mediaRight: [{ type: 'video', src: '/photo/theater/maxidance.mp4', poster: '/photo/theater/maxidance-poster.jpg', alt: 'Dancing with my daughter' }],
+  },
   {
     slug: 'snow-camp',
     number: '17',
     category: 'experiences',
     label: 'Snow Cave Digger, Sleeper & Camera',
     title: '-10°C NIGHTS',
-    year: '2020',
+    year: '2019 – 2020', // 跨年那一晚
     role: 'Snow Cave Digger, Sleeper & Camera',
     text: 'In our first New Years after moving to Switzerland, we dug snow caves with friends, slept in an igloo and ran naked through the snow.',
-    cover: '/photo/snowcamp/snowcamp2.jpg',
+    cover: '/photo/snowcamp/snowcamp3.jpg',
     media: [
       { type: 'image', src: '/photo/snowcamp/snowcamp1.jpg', alt: 'Igloo lit up at night' },
       { type: 'image', src: '/photo/snowcamp/snowcamp2.jpg', alt: 'Cooking in the snow cave' },

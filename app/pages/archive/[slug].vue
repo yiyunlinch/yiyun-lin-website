@@ -140,6 +140,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.01em;
+  white-space: pre-line; /* 标题里的 \n 换行 */
 }
 
 .works {

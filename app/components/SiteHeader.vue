@@ -7,7 +7,6 @@ const links = [
   { label: 'HOME', anchor: 'home', arrow: '↑' },
   { label: 'ABOUT', anchor: 'about', arrow: '→' },
   { label: 'ARCHIVE', anchor: 'archive', arrow: '↓' },
-  { label: 'CONTACT', anchor: 'contact', arrow: '↓' },
 ]
 
 // 打开菜单时看现在在哪一部分，那一行亮白
@@ -15,9 +14,8 @@ const route = useRoute()
 const current = ref('home')
 function findCurrent() {
   if (route.path.startsWith('/archive/')) return 'archive'
-  if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) return 'contact'
   let found = 'home'
-  for (const name of ['archive', 'about', 'contact']) {
+  for (const name of ['archive', 'about']) {
     const el = findAnchor(name)
     if (el && el.getBoundingClientRect().top <= innerHeight * 0.5) found = name
   }
