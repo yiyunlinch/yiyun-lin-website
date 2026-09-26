@@ -14,10 +14,11 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 
 // 视频 / 图片最多用到屏幕底部往上 40px，整个作品在第一屏里就能看完
 // （最少 360px 高，文字很多的页面才需要往下滚一点）
-const viewer = ref<{ $el: HTMLElement } | null>(null)
+const viewer = ref<HTMLElement | { $el: HTMLElement } | null>(null)
 const fitHeight = ref<number | null>(null)
 function fit() {
-  const el = viewer.value?.$el
+  const v = viewer.value
+  const el = v instanceof HTMLElement ? v : v?.$el
   if (!el) return
   const top = el.getBoundingClientRect().top + scrollY
   fitHeight.value = Math.max(360, innerHeight - top - 40)
@@ -58,7 +59,18 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
       </ul>
     </div>
 
+    <!-- 左右两个窗口：左边照片（4:3），右边视频（16:9），两边一样高 -->
+    <div
+      v-if="item.mediaRight"
+      ref="viewer"
+      class="viewer split"
+      :style="fitHeight ? { '--fit-h': `${fitHeight}px` } : undefined"
+    >
+      <MediaViewer class="left" :media="item.media" :title="item.title" ratio="4 / 3" />
+      <MediaViewer class="right" :media="item.mediaRight" :title="item.title" />
+    </div>
     <MediaViewer
+      v-else
       ref="viewer"
       class="viewer"
       :media="item.media"
@@ -147,6 +159,33 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
 @media (min-width: 900px) {
   .viewer {
     max-width: calc(var(--fit-h, 100vh) * 16 / 9);
+  }
+
+  /* 两个窗口的宽度按比例分（4:3 和 16:9），高度就一样 */
+  .viewer.split {
+    display: flex;
+    gap: 16px;
+    max-width: calc(var(--fit-h, 100vh) * (4 / 3 + 16 / 9) + 16px);
+  }
+
+  .split .left,
+  .split .right {
+    min-width: 0; /* 大图片不会把窗口撑宽 */
+  }
+
+  .split .left {
+    flex: 4 0 0;
+  }
+
+  .split .right {
+    flex: 5.333 0 0;
+  }
+}
+
+/* 手机：上下排 */
+@media (max-width: 899px) {
+  .split .right {
+    margin-top: 12px;
   }
 }
 

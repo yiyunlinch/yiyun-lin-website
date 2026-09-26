@@ -33,6 +33,7 @@ export interface ArchiveItem {
   cover?: string // 首页封面图；不写就用 media 里的第一个
   coverVideo?: string // 动态封面（静音循环播放），这时 cover 当加载前显示的图
   media: Media[]
+  mediaRight?: Media[] // 有的话：左边 media（照片，4:3），右边这个（视频，16:9），同样高
   links?: { label: string, href: string }[]
   linksFirst?: boolean // true = 链接放在介绍文字上面
 }
@@ -173,6 +174,29 @@ export const items: ArchiveItem[] = [
     media: [{ type: 'youtube', src: 'Efs4PtVbWjc', start: 4, alt: 'MEAT / CLEANSING' }],
   },
   { slug: 'yoga', number: '13', category: 'explorations', label: 'Yoga', title: 'YOGA', media: [] },
+  {
+    slug: 'snow-camp',
+    number: '17',
+    category: 'explorations',
+    label: 'Snow Cave Digger, Sleeper & Camera',
+    title: '-10°C NIGHTS',
+    year: '2020',
+    role: 'Snow Cave Digger, Sleeper & Camera',
+    text: 'In our first New Years after moving to Switzerland, we dug snow caves with friends, slept in an igloo and ran naked through the snow.',
+    cover: '/photo/snowcamp/snowcamp2.jpg',
+    media: [
+      { type: 'image', src: '/photo/snowcamp/snowcamp1.jpg', alt: 'Igloo lit up at night' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp2.jpg', alt: 'Cooking in the snow cave' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp3.jpg', alt: 'Carrying gear up the mountain' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp4.jpg', alt: 'Campfire in the snow' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp6.jpg', alt: 'Sleeping inside the snow cave' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp7.jpg', alt: 'Inside the snow cave' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp8.jpg', alt: 'Digging the snow cave' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp9.jpg', alt: 'Dinner in the snow cave' },
+      { type: 'image', src: '/photo/snowcamp/snowcamp99.jpg', alt: 'Digging in the snow' },
+    ],
+    mediaRight: [{ type: 'youtube', src: 'oZ3RcSFZL90', alt: 'Snow Camping New Year 2020' }],
+  },
   { slug: 'research', number: '14', category: 'explorations', label: 'Research', title: 'RESEARCH', media: [] },
   { slug: 'life-experiment', number: '15', category: 'explorations', label: 'Life / Experiment', title: 'LIFE / EXPERIMENT', media: [] },
 ]

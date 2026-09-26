@@ -2,7 +2,8 @@
 // 一个作品只用一个媒体窗口：多张图时左右切换，一张图时不显示箭头
 import type { Media } from '~/data/archive'
 
-const props = defineProps<{ media: Media[], title: string }>()
+// ratio：画框的比例，默认 16:9；左右两个窗口时照片那边用 4:3
+const props = defineProps<{ media: Media[], title: string, ratio?: string }>()
 
 const index = ref(0)
 const count = computed(() => props.media.length)
@@ -92,7 +93,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="viewer" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
-    <div class="stage">
+    <div class="stage" :style="ratio ? { aspectRatio: ratio } : undefined">
       <template v-if="current?.type === 'site'">
         <iframe
           v-if="isDesktop"
@@ -197,6 +198,7 @@ onBeforeUnmount(() => {
   background: rgba(0, 0, 0, 0.55);
   font-size: var(--label);
   letter-spacing: 0.15em;
+  white-space: nowrap; /* 窄窗口里 1 / 9 不会断成三行 */
 }
 
 .nav button {
