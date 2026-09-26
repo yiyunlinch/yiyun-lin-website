@@ -191,6 +191,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
 
 .text {
   max-width: 600px;
+  white-space: pre-line; /* 介绍里写 \n 就换行 */
   margin: 16px 0 0;
   font-size: var(--small);
   line-height: 1.7;

@@ -22,6 +22,7 @@ const T = {
   phraseIn: [-0.5, 0], // 滑上来时淡入，到第二页就完全出现
   phraseOut: [1.00, 1.15],
   archiveIn: [1.20, 1.45],
+  actionsOut: [0.35, 0.60], // 底部一排在四张图展开前淡出，不和卡片文字重叠
 } as const
 const ARCHIVE_AT = 1.5 // 点 ARCHIVE 跳到这里：Archive 已完全出现
 
@@ -39,6 +40,7 @@ const frames = computed(() => {
 
 const phraseOpacity = computed(() => ramp(progress.value, T.phraseIn) - ramp(progress.value, T.phraseOut))
 const archiveOpacity = computed(() => ramp(progress.value, T.archiveIn))
+const actionsOpacity = computed(() => Math.min(ramp(progress.value, T.phraseIn), 1 - ramp(progress.value, T.actionsOut)))
 
 // ---------- 四张图这一行的位置 ----------
 // layout 在页面加载和窗口大小改变时测量一次
@@ -130,6 +132,14 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
+
+      <!-- 和首页一样的底部一排 -->
+      <div
+        class="container bottom"
+        :style="{ opacity: actionsOpacity, visibility: actionsOpacity > 0 ? 'visible' : 'hidden' }"
+      >
+        <BottomActions />
+      </div>
     </div>
   </section>
 </template>
@@ -153,6 +163,13 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 48px;
 }
 
 .texts {
