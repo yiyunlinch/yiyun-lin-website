@@ -3,11 +3,25 @@ const { goTo } = useAnchor()
 const open = ref(false)
 
 const links = [
-  { label: 'HOME', anchor: 'home' },
-  { label: 'ABOUT ME', anchor: 'about' },
-  { label: 'ARCHIVE', anchor: 'archive' },
-  { label: 'CONTACT', anchor: 'contact' },
+  { label: 'HOME', anchor: 'home', arrow: '↑' },
+  { label: 'ABOUT', anchor: 'about', arrow: '→' },
+  { label: 'ARCHIVE', anchor: 'archive', arrow: '↓' },
+  { label: 'CONTACT', anchor: 'contact', arrow: '↓' },
 ]
+
+// 打开菜单时看现在在哪一部分，那一行亮白
+const route = useRoute()
+const current = ref('home')
+function findCurrent() {
+  if (route.path.startsWith('/archive/')) return 'archive'
+  if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) return 'contact'
+  let found = 'home'
+  for (const name of ['archive', 'about', 'contact']) {
+    const el = findAnchor(name)
+    if (el && el.getBoundingClientRect().top <= innerHeight * 0.5) found = name
+  }
+  return found
+}
 
 function select(anchor: string) {
   open.value = false
@@ -16,6 +30,7 @@ function select(anchor: string) {
 
 // 菜单打开时：禁止背景滚动，按 Esc 关闭
 watch(open, (isOpen) => {
+  if (isOpen) current.value = findCurrent()
   document.documentElement.style.overflow = isOpen ? 'hidden' : ''
 })
 
@@ -42,12 +57,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   <Transition name="fade">
     <nav v-if="open" class="menu" aria-label="Main">
       <a
-        v-for="link in links"
+        v-for="(link, i) in links"
         :key="link.anchor"
         :href="link.anchor === 'home' ? '/' : `/#${link.anchor}`"
+        :class="{ current: link.anchor === current }"
         @click.prevent="select(link.anchor)"
       >
-        {{ link.label }}
+        <span class="num">{{ String(i + 1).padStart(2, '0') }}</span>{{ link.label }} {{ link.arrow }}
       </a>
     </nav>
   </Transition>
@@ -101,21 +117,32 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2vh;
+  gap: 18px;
   padding: 0 var(--pad);
-  background: rgba(0, 0, 0, 0.94);
+  background: rgba(0, 0, 0, 0.82); /* 还能隐约看到后面的视频 */
 }
 
+/* 和首页 中国 × SWITZERLAND 那行一样的字；其余暗，当前 / hover 亮白 */
 .menu a {
-  font-size: clamp(40px, 7vw, 96px);
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: 0.02em;
+  align-self: flex-start;
+  font-size: clamp(14px, 1.5vw, 22px);
+  letter-spacing: 0.12em;
+  color: rgba(242, 240, 234, 0.65);
   transition: color 0.3s;
 }
 
-.menu a:hover {
-  color: var(--muted);
+.menu .num {
+  display: inline-block;
+  width: 3.2em;
+  color: rgba(242, 240, 234, 0.4);
+  transition: color 0.3s;
+}
+
+.menu a.current,
+.menu a:hover,
+.menu a.current .num,
+.menu a:hover .num {
+  color: var(--fg);
 }
 
 .fade-enter-active,
