@@ -11,6 +11,22 @@ if (!item.value) {
 }
 
 useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
+
+// 视频 / 图片最多用到屏幕底部往上 40px，整个作品在第一屏里就能看完
+// （最少 360px 高，文字很多的页面才需要往下滚一点）
+const viewer = ref<{ $el: HTMLElement } | null>(null)
+const fitHeight = ref<number | null>(null)
+function fit() {
+  const el = viewer.value?.$el
+  if (!el) return
+  const top = el.getBoundingClientRect().top + scrollY
+  fitHeight.value = Math.max(360, innerHeight - top - 40)
+}
+onMounted(() => {
+  fit()
+  window.addEventListener('resize', fit)
+})
+onBeforeUnmount(() => window.removeEventListener('resize', fit))
 </script>
 
 <template>
@@ -42,7 +58,13 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
       </ul>
     </div>
 
-    <MediaViewer class="viewer" :media="item.media" :title="item.title" />
+    <MediaViewer
+      ref="viewer"
+      class="viewer"
+      :media="item.media"
+      :title="item.title"
+      :style="fitHeight ? { '--fit-h': `${fitHeight}px` } : undefined"
+    />
   </main>
 </template>
 
@@ -58,13 +80,13 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 
 .item {
   max-width: 1280px;
-  padding-top: 140px;
-  padding-bottom: 20vh;
+  padding-top: 100px;
+  padding-bottom: 60px;
 }
 
 .back {
   display: inline-block;
-  margin-bottom: 8vh;
+  margin-bottom: 32px;
   transition: color 0.3s;
 }
 
@@ -118,7 +140,14 @@ useHead({ title: () => `${item.value?.title} — YIYUN LIN` })
 }
 
 .viewer {
-  margin-top: 6vh;
+  margin-top: 28px;
+}
+
+/* 电脑：宽度按 16:9 跟着可用高度走，保证整个在这一屏里 */
+@media (min-width: 900px) {
+  .viewer {
+    max-width: calc(var(--fit-h, 100vh) * 16 / 9);
+  }
 }
 
 .text {

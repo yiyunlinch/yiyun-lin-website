@@ -129,11 +129,15 @@ export const items: ArchiveItem[] = [
     slug: 'zahnihero',
     number: '16', // 原来的 03，往后移了
     category: 'interactions',
-    label: 'Interactive',
-    title: 'ZAHNIHERO', // TODO: 确认标题
-    meta: 'Physical Computing', // TODO
-    text: 'A few words about it.', // TODO
-    media: [{ type: 'image', src: '/photo/03computer.jpg', alt: 'Toothbrush connected to a laptop' }],
+    label: 'Physical Computing Designer',
+    title: 'ZAHNIHERO',
+    year: '2025',
+    role: 'Physical Computing Designer',
+    text: 'ZahniHero is an interactive toothbrushing assistant designed specifically for children, to motivate them to brush their teeth for up to 3 minutes. All components were tested, but the final prototype was never fully assembled.',
+    cover: '/photo/03computer.jpg',
+    media: [{ type: 'image', src: '/photo/16zahnihero.jpg', alt: 'ZahniHero prototype' }], // GitHub README 第一张图
+    links: [{ label: 'github.com/yiyunlinch/zahnihero', href: 'https://github.com/yiyunlinch/zahnihero' }],
+    linksFirst: true,
   },
   { slug: 'interactive', number: '09', category: 'interactions', label: 'Interactive', title: 'INTERACTIVE', media: [] },
   { slug: 'ai-experiment', number: '10', category: 'interactions', label: 'AI Experiment', title: 'AI EXPERIMENT', media: [] },

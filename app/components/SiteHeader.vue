@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { goTo } = useAnchor()
+const sound = useSound()
 const open = ref(false)
 
 const links = [
@@ -44,14 +45,24 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 <template>
   <header class="header">
     <a href="/" class="logo" @click.prevent="select('home')">YIYUN LIN</a>
-    <button
-      class="menu-btn"
-      :aria-expanded="open"
-      :aria-label="open ? 'Close menu' : 'Open menu'"
-      @click="open = !open"
-    >
-      {{ open ? 'CLOSE ×' : 'MENU ↗' }}
-    </button>
+    <div class="right">
+      <button
+        class="sound-btn"
+        :aria-pressed="sound.on.value"
+        :aria-label="sound.on.value ? 'Turn sound off' : 'Turn sound on'"
+        @click="sound.toggle()"
+      >
+        SOUND {{ sound.on.value ? '×' : '↗' }}
+      </button>
+      <button
+        class="menu-btn"
+        :aria-expanded="open"
+        :aria-label="open ? 'Close menu' : 'Open menu'"
+        @click="open = !open"
+      >
+        {{ open ? 'CLOSE ×' : 'MENU ↗' }}
+      </button>
+    </div>
   </header>
 
   <Transition name="fade">
@@ -84,8 +95,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 }
 
 .logo,
-.menu-btn {
+.right {
   pointer-events: auto;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
 }
 
 .logo {
@@ -94,6 +111,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   letter-spacing: 0.12em;
 }
 
+.sound-btn,
 .menu-btn {
   min-width: 44px;
   min-height: 44px;
@@ -106,6 +124,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   transition: color 0.3s;
 }
 
+.sound-btn:hover,
+.sound-btn[aria-pressed='true'],
 .menu-btn:hover {
   color: var(--fg);
 }

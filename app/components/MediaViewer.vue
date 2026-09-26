@@ -154,6 +154,8 @@ onBeforeUnmount(() => {
 
 .stage {
   aspect-ratio: 16 / 9;
+  min-height: 0; /* 竖一点的图片不会把框撑高，框永远是 16:9 */
+  overflow: hidden;
   display: grid;
   place-items: center;
 }
