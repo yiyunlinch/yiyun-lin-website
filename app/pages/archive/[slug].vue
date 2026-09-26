@@ -38,7 +38,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
     <!-- 好几部作品：每部一行英文标题, 年份，下面一行中文 -->
     <h1 v-if="item.works" class="works">
       <span v-for="w in item.works" :key="w.title" class="work">
-        <span class="title">{{ w.title }}<template v-if="w.year">, {{ w.year }}, {{ placeOf(w.year) }}</template></span>
+        <span class="title">{{ w.title }}<template v-if="w.year">, {{ w.year }}</template><template v-if="placeOf(w.year, w.place)">, {{ placeOf(w.year, w.place) }}</template></span>
         <span v-if="w.titleZh" class="title title-zh">{{ w.titleZh }}</span>
       </span>
     </h1>
@@ -159,6 +159,11 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
 @media (min-width: 900px) {
   .viewer {
     max-width: calc(var(--fit-h, 100vh) * 16 / 9);
+  }
+
+  /* 画框下面有小字时，给小字留出一行的高度 */
+  .viewer:has(.caption) {
+    max-width: calc((var(--fit-h, 100vh) - 32px) * 16 / 9);
   }
 
   /* 两个窗口的宽度按比例分（4:3 和 16:9），高度就一样 */

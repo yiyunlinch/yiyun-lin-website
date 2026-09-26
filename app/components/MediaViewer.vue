@@ -93,6 +93,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="viewer" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
+    <div class="frame">
     <div class="stage" :style="ratio ? { aspectRatio: ratio } : undefined">
       <template v-if="current?.type === 'site'">
         <iframe
@@ -144,13 +145,24 @@ onBeforeUnmount(() => {
       <span>{{ index + 1 }} / {{ count }}</span>
       <button aria-label="Next" @click="go(1)">→</button>
     </div>
+    </div>
+
+    <p v-if="current?.caption" class="caption">{{ current.caption }}</p>
   </div>
 </template>
 
 <style scoped>
-.viewer {
+.frame {
   position: relative;
   background: #0b0b0b;
+}
+
+/* 画框下面的小字，和页面上的 ROLE 一样 */
+.caption {
+  margin: 10px 0 0;
+  font-size: var(--small);
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 .stage {

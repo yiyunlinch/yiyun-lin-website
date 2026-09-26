@@ -14,6 +14,7 @@ export interface Media {
   poster?: string // 视频加载前显示的图
   href?: string // 图片可以点：点了在新窗口打开这个网址
   start?: number // youtube 用：从第几秒开始播放
+  caption?: string // 显示在画框下面的小字
 }
 
 export interface ArchiveItem {
@@ -25,7 +26,7 @@ export interface ArchiveItem {
   year?: string // 显示在标题后面：TITLE, 2025, SWITZERLAND（地点按年份自动加）
   place?: string // 地点不按年份时单独写；写 '' 就不显示地点
   titleZh?: string // 中文标题，显示在英文标题下面
-  works?: { title: string, titleZh?: string, year?: string }[] // 一个项目里有好几部作品时，代替大标题一行一行列出来
+  works?: { title: string, titleZh?: string, year?: string, place?: string }[] // 一个项目里有好几部作品时，代替大标题一行一行列出来
   meta?: string // 例如 "Film Production · Shanghai · 2019"
   role?: string // 例如 "Producer"
   text?: string // 简短介绍
@@ -52,11 +53,17 @@ export const items: ArchiveItem[] = [
     number: '02',
     category: 'stories',
     label: 'Feature Film Line Producer', // STORIES 下面的小字写身份
-    title: 'MRS MILLS',
-    year: '2018',
-    role: 'Shanghai Line Producer',
+    title: 'MRS MILLS · COFFEE · MAGIC 7', // 浏览器标签页上的名字；页面上显示下面的 works
+    works: [
+      { title: 'MAGIC 7', year: '2023', place: '' },
+      { title: 'COFFEE', year: '2019', place: '' },
+      { title: 'MRS MILLS', year: '2018', place: '' },
+      { title: 'ENTER THE WARRIORS GATE', year: '2016', place: '' },
+      { title: 'VOYAGE EN CHINE', year: '2015', place: '' },
+    ],
+    role: 'China Line Producer',
     cover: '/photo/02shanghai.jpg',
-    media: [{ type: 'video', src: '/photo/02-making-of.mp4', poster: '/photo/02shanghai.jpg', alt: 'Making-of in Shanghai' }],
+    media: [{ type: 'video', src: '/photo/02-making-of.mp4', poster: '/photo/02shanghai.jpg', alt: 'Making-of in Shanghai', caption: 'Mrs Mills — behind the scenes' }],
   },
   {
     slug: 'camp-ghulja',
@@ -186,7 +193,7 @@ export const items: ArchiveItem[] = [
     year: '2018 – NOW',
     place: 'FROM INDIA',
     role: 'Yogi, TTC 500 Certified Teacher',
-    text: 'Every few years I return to India to practise. I am deeply drawn to its spiritual culture, and I have always known it is my second home.\nDhyana, Pranayama, Bhakti, Shanti, Ommmmmmmmm\nIn 2027 I will go back to my guru to study again.',
+    text: 'Every few years I return to India to practise. I am deeply drawn to its spiritual culture, and I have always known it is my second home.\nDhyana, Pranayama, Bhakti, Shanti, Ommmmmmmmm\nIn 2027 I will go back to my guru, Dr. Ashutosh, to study again.',
     cover: '/photo/yoga/yoga3.jpg',
     media: [
       { type: 'image', src: '/photo/yoga/yoga1.jpg', alt: 'With my guru' },
