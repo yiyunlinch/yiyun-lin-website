@@ -24,11 +24,12 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
     <div class="shade" />
 
     <div class="content container">
+      <h1 class="title">BEYOND ONE FRAME.</h1>
+
+      <!-- 三组词在大标题下面，小字 -->
       <p class="pairs">
         <span v-for="pair in site.pairs" :key="pair">{{ pair }}</span>
       </p>
-
-      <h1 class="title">BEYOND ONE FRAME.</h1>
 
       <BottomActions :hint-opacity="hintOpacity" />
     </div>
@@ -56,6 +57,8 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   position: absolute;
   inset: 0;
   background:
+    /* 最下面 5% 慢慢变成全黑，接上第二页的黑底 */
+    linear-gradient(to bottom, transparent 95%, #000),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0.7));
 }
 
@@ -74,14 +77,14 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   gap: 2em; /* 三组之间大约两个全角空格，整体留在左边 60% 以内 */
   max-width: 62%;
   color: var(--fg-2);
-  margin: 0 0 4vh;
-  font-size: clamp(14px, 1.5vw, 22px);
-  letter-spacing: 0.12em;
+  margin: 3vh 0 0;
+  font-size: var(--label);
+  letter-spacing: 0.15em;
   white-space: nowrap;
 }
 
 .title {
-  margin: 24px 0 0; /* 比原来稍微往下 */
+  margin: calc(4vh + 54px) 0 0; /* 三组词移到下面后，大标题留在原来的高度 */
   font-size: var(--display);
   font-weight: 400;
   line-height: 1;

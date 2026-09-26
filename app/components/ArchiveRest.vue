@@ -23,8 +23,8 @@ const cells = Array.from({ length: rowCount }, (_, r) => columns.map(c => c[r]))
 .rest {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap);
-  row-gap: calc(var(--gap) * 2);
+  column-gap: var(--col-gap);
+  row-gap: var(--row-gap);
   align-items: start;
   padding-bottom: 20vh;
 }

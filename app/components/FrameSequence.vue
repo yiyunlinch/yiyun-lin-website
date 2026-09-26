@@ -14,22 +14,22 @@ const progress = ref(0)
 
 // ---------- 时间轴 ----------
 // 单位是"屏"：往下滚一整屏 = 1。想调节奏，改这里的数字就行
-// 0 = 这一段刚好顶到屏幕上方；负数 = 这一段还在从下面滑上来
-// 图一停住就开始展开，中间不停顿
-const SCREENS = 1.0 // 整段动画的滚动距离
+// 0 = Mrs Mills 的图整张露出来的那一刻（马上开始往左下方移动，出现右边的图）
+// progress 本身：0 = .sticky 刚好顶到屏幕上方；负数 = 还在从下面滑上来
 const T = {
   k2: [0.00, 0.25], // 出现第二格
   k3: [0.25, 0.50], // 出现第三格
   k4: [0.50, 0.75], // 出现第四格
-  archiveIn: [0.75, 1.00],
+  titleIn: [0.00, 0.75], // 左上角 ARCHIVE：图一开始变小往左走就出现
+  archiveIn: [0.75, 1.00], // 卡片下面的小字
   actionsIn: [-0.5, 0], // 底部一排：图滑上来时淡入
   actionsOut: [0.35, 0.60], // 在四张图展开前淡出，不和卡片文字重叠
 } as const
-const ARCHIVE_AT = 1.0 // 点 ARCHIVE 跳到这里：Archive 已完全出现
+const DURATION = 1.0 // 从图整张露出来到 Archive 完全出现，滚几屏
 
-// 那句话：按它在屏幕上的高度（0 = 顶，1 = 底）淡入淡出
-// 一往下拉就出现，图的上边出现之前就消失
-const PHRASE = { in: [1.0, 0.9], out: [0.8, 0.64] } as const
+// 那句话：一往下拉就出现（按它在屏幕上的高度，0 = 顶，1 = 底）
+// Mrs Mills 的图露出来时淡出，图露出一半时完全消失（按图露出了几成，0 → 1）
+const PHRASE = { in: [0.99, 0.89], out: [0.1, 0.5] } as const
 
 // 把 p 在 [a, b] 之间映射成 0 → 1，并做缓动
 function ramp(p: number, [a, b]: readonly number[]) {
@@ -37,24 +37,28 @@ function ramp(p: number, [a, b]: readonly number[]) {
   return t * t * (3 - 2 * t)
 }
 
+// 时间轴上的位置：从图整张露出来的那一刻算起
+const t = computed(() => progress.value - layout.start)
+
 // 现在"打开了几格"：1 → 4，中间是小数，表示正在过渡
-const frames = computed(() => {
-  const p = progress.value
-  return 1 + ramp(p, T.k2) + ramp(p, T.k3) + ramp(p, T.k4)
-})
+const frames = computed(() => 1 + ramp(t.value, T.k2) + ramp(t.value, T.k3) + ramp(t.value, T.k4))
 
 const phraseY = ref(1) // 那句话的中心在屏幕上的高度
+const imageShown = ref(0) // 第一张图露出了几成
 const phrase = ref<HTMLElement>()
 const phraseOpacity = computed(() => {
   const y = -phraseY.value // 取负数，ramp 才是从小到大
-  return ramp(y, [-PHRASE.in[0], -PHRASE.in[1]]) - ramp(y, [-PHRASE.out[0], -PHRASE.out[1]])
+  return ramp(y, [-PHRASE.in[0], -PHRASE.in[1]]) * (1 - ramp(imageShown.value, PHRASE.out))
 })
-const archiveOpacity = computed(() => ramp(progress.value, T.archiveIn))
-const actionsOpacity = computed(() => Math.min(ramp(progress.value, T.actionsIn), 1 - ramp(progress.value, T.actionsOut)))
+const titleOpacity = computed(() => ramp(t.value, T.titleIn))
+const archiveOpacity = computed(() => ramp(t.value, T.archiveIn))
+const actionsOpacity = computed(() => Math.min(ramp(progress.value, T.actionsIn), 1 - ramp(t.value, T.actionsOut)))
 
 // ---------- 四张图这一行的位置 ----------
 // layout 在页面加载和窗口大小改变时测量一次
-const layout = reactive({ width: 0, gap: 0, imageCenter: 0, lift: 0 })
+const layout = reactive({ width: 0, gap: 0, imageCenter: 0, lift: 0, start: 0 })
+// .sticky 停住后还要滚几屏（动画在 .sticky 停住前就开始了，所以比 DURATION 短）
+const screens = computed(() => DURATION + layout.start)
 
 function measure() {
   const rowEl = row.value
@@ -67,6 +71,9 @@ function measure() {
   layout.imageCenter = firstFrame.offsetTop + firstFrame.offsetHeight / 2
   // 只有一张图时，把它往上移到屏幕中间偏下
   layout.lift = rowEl.offsetTop + layout.imageCenter - sticky.offsetHeight * 0.55
+  // 图（放大 1.8 倍）的下边在 .sticky 里的高度 → 滑到屏幕底部时的 progress
+  const bottom = sticky.offsetHeight * 0.55 + 0.9 * firstFrame.offsetHeight
+  layout.start = Math.min(0, bottom / window.innerHeight - 1)
 }
 
 const rowStyle = computed(() => {
@@ -92,9 +99,11 @@ function update() {
   if (!el) return
   // 滚了几屏：从 .sticky 顶到屏幕上方开始算（前面那段黑色不算）
   const scrolled = (-el.getBoundingClientRect().top - (intro.value?.offsetHeight ?? 0)) / window.innerHeight
-  progress.value = Math.min(Math.max(scrolled, -1), SCREENS)
+  progress.value = Math.min(Math.max(scrolled, -1), screens.value)
   const r = phrase.value?.getBoundingClientRect()
   if (r) phraseY.value = (r.top + r.height / 2) / window.innerHeight
+  const img = row.value?.querySelector('.frame')?.getBoundingClientRect()
+  if (img) imageShown.value = Math.min(Math.max((window.innerHeight - img.top) / img.height, 0), 1)
 }
 function onScroll() {
   raf ||= requestAnimationFrame(update)
@@ -119,8 +128,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="section" class="seq">
-    <div class="archive-anchor" data-anchor="archive" :style="{ top: `calc(var(--intro) + ${ARCHIVE_AT * 100}vh)` }" />
+  <section ref="section" class="seq" :style="{ '--screens': screens }">
+    <!-- 点 ARCHIVE 跳到这里：Archive 已完全出现 -->
+    <div class="archive-anchor" data-anchor="archive" />
 
     <!-- 那句话压在第一页和第二页的边线正中，跟着正常滚动，两句一起出现 -->
     <div ref="intro" class="intro">
@@ -131,7 +141,7 @@ onBeforeUnmount(() => {
 
     <div class="sticky" :style="{ '--archive': archiveOpacity }">
       <div class="container texts">
-        <h2 class="archive-title">ARCHIVE</h2>
+        <h2 class="archive-title" :style="{ opacity: titleOpacity }">ARCHIVE</h2>
       </div>
 
       <div class="container row-wrap">
@@ -162,9 +172,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .seq {
-  --intro: 0px; /* 图前面多加的黑色，0 = 第一页下面直接是图这一段 */
+  --intro: 10vh; /* 图前面多加的黑色，让那句话停留久一点 */
   position: relative;
-  height: calc(var(--intro) + 200vh); /* 动画的滚动距离 = 200vh - 100vh = 1 屏，和 SCREENS 保持一致 */
+  height: calc(var(--intro) + 100vh + var(--screens) * 100vh); /* .sticky 停住 --screens 屏 */
 }
 
 .intro {
@@ -184,6 +194,7 @@ onBeforeUnmount(() => {
 }
 
 .archive-anchor {
+  top: calc(var(--intro) + var(--screens) * 100vh);
   position: absolute;
   left: 0;
   height: 1px;
@@ -227,25 +238,24 @@ onBeforeUnmount(() => {
   font-size: clamp(48px, 7vw, 120px);
   font-weight: 500;
   line-height: 1;
-  opacity: var(--archive);
 }
 
 .row-wrap {
   /* 和下面 ArchiveRest 的行距一样，第一行和第二行才对齐 */
-  padding-bottom: calc(var(--gap) * 2);
+  padding-bottom: var(--row-gap);
 }
 
 .row {
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap);
+  column-gap: var(--col-gap);
   will-change: transform;
 }
 
 /* 大类名跟着自己那一格一起出现（格子的透明度） */
 .label {
-  margin: 0 0 14px;
+  margin: 0 0 26px; /* 线和下面的图空开一点 */
 }
 
 /* 卡片下面的小字在最后和 ARCHIVE 一起出现 */

@@ -137,6 +137,8 @@ export const items: ArchiveItem[] = [
     cover: '/photo/08one-founder.jpg',
     // YouTube 频道页面的截图，点了打开频道
     media: [{ type: 'image', src: '/photo/08youtube-channel.jpg', alt: 'YouTube channel: Stories in Switzerland', href: 'https://www.youtube.com/channel/UC8zfK7OKufZ3JLtwS_z9LZA' }],
+    leftRatio: 16 / 9, // 截图是 16:9，和右边视频一样大
+    mediaRight: [{ type: 'youtube', src: '6_ikG1D640U', alt: 'One Founder, One Venture' }],
     links: [{ label: 'www.digezz.ch/one-founder-one-venture', href: 'https://www.digezz.ch/one-founder-one-venture-stories-in-switzerland/' }],
     linksFirst: true,
   },

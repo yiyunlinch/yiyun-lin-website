@@ -12,6 +12,9 @@
   /* 页面左右留白、四栏之间的间距 */
   --pad: clamp(20px, 4vw, 64px);
   --gap: clamp(16px, 2vw, 32px);
+  /* 首页 Archive：列和列之间宽、行和行之间窄，眼睛才会竖着看成四类 */
+  --col-gap: calc(var(--gap) * 2.5);
+  --row-gap: var(--gap);
   --max: 1600px;
 
   /* 大标题字号：BEYOND ONE FRAME. */
@@ -94,7 +97,7 @@ button {
 [data-cat="productions"] { --cat-light: #f2e6b8; --cat-deep: #c9b572; }
 [data-cat="stories"] { --cat-light: #c4d6ec; --cat-deep: #8aa3c4; }
 [data-cat="interactions"] { --cat-light: #c8e4cc; --cat-deep: #8db595; }
-[data-cat="experiences"] { --cat-light: #f0cfc4; --cat-deep: #c99383; }
+[data-cat="experiences"] { --cat-light: #f2c4d2; --cat-deep: #c98aa0; }
 
 /* 首页四个大类的名字：和项目页面的标题一样大 */
 .cat-title {
@@ -104,6 +107,9 @@ button {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--cat-light, var(--fg));
+  /* 下面一条同色的线，和这一列一样宽，把整列连在一起 */
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--cat-deep, var(--muted));
 }
 
 /* 大类名字后面的小字：STORIES — I tell.（白色） */
@@ -113,7 +119,7 @@ button {
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: none;
-  color: var(--fg);
+  color: color-mix(in srgb, var(--cat-light, var(--fg)) 55%, #fff); /* 跟大标题同色，再浅一点 */
 }
 
 /* 线框按钮：[ ABOUT ME → ] */
