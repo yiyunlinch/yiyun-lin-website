@@ -18,14 +18,14 @@ const progress = ref(0)
 // progress 本身：0 = .sticky 刚好顶到屏幕上方；负数 = 还在从下面滑上来
 const T = {
   k2: [0.00, 0.25], // 出现第二格
-  k3: [0.25, 0.50], // 出现第三格
-  k4: [0.50, 0.75], // 出现第四格
-  titleIn: [0.00, 0.75], // 左上角 ARCHIVE：图一开始变小往左走就出现
-  archiveIn: [0.75, 1.00], // 卡片下面的小字
-  actionsIn: [-0.5, 0], // 底部一排：图滑上来时淡入
-  actionsOut: [0.35, 0.60], // 在四张图展开前淡出，不和卡片文字重叠
+  k3: [0.125, 0.375], // 出现第三格：第二格出现一半就开始，整排往左移
+  k4: [0.375, 0.625], // 出现第四格：接着第三格，中间不停
+  titleIn: [0.00, 0.625], // 左上角 ARCHIVE：图一开始变小往左走就出现
+  archiveIn: [0.625, 0.875], // 卡片下面的小字
+  actionsIn: [-0.8, -0.2], // 底部一排：图滑上来时就开始淡入
+  actionsOut: [0.45, 0.625], // 最后一小段淡出：卡片下面的小字（archiveIn）开始出现时刚好消失
 } as const
-const DURATION = 1.0 // 从图整张露出来到 Archive 完全出现，滚几屏
+const DURATION = 0.875 // 从图整张露出来到 Archive 完全出现，滚几屏
 
 // 那句话：一往下拉就出现（按它在屏幕上的高度，0 = 顶，1 = 底）
 // Mrs Mills 的图露出来时淡出，图露出一半时完全消失（按图露出了几成，0 → 1）
@@ -52,7 +52,7 @@ const phraseOpacity = computed(() => {
 })
 const titleOpacity = computed(() => ramp(t.value, T.titleIn))
 const archiveOpacity = computed(() => ramp(t.value, T.archiveIn))
-const actionsOpacity = computed(() => Math.min(ramp(progress.value, T.actionsIn), 1 - ramp(t.value, T.actionsOut)))
+const actionsOpacity = computed(() => Math.min(ramp(t.value, T.actionsIn), 1 - ramp(t.value, T.actionsOut)))
 
 // ---------- 四张图这一行的位置 ----------
 // layout 在页面加载和窗口大小改变时测量一次

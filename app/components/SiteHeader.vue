@@ -47,10 +47,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       <button
         class="sound-btn"
         :aria-pressed="sound.on.value"
-        :aria-label="sound.on.value ? 'Turn sound off' : 'Turn sound on'"
+        :aria-label="sound.on.value ? 'Turn background sound off' : 'Turn background sound on'"
         @click="sound.toggle()"
       >
-        SOUND {{ sound.on.value ? '×' : '↗' }}
+        <span class="wide">BACKGROUND </span>SOUND {{ sound.on.value ? '×' : '↗' }}
       </button>
       <button
         class="menu-btn"
@@ -120,6 +120,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   letter-spacing: 0.15em;
   color: var(--fg-2);
   transition: color 0.3s;
+}
+
+/* 手机上一行放不下，只写 SOUND */
+@media (max-width: 600px) {
+  .wide {
+    display: none;
+  }
 }
 
 .sound-btn:hover,

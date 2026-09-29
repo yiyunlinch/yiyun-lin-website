@@ -142,6 +142,19 @@ export const items: ArchiveItem[] = [
     links: [{ label: 'www.digezz.ch/one-founder-one-venture', href: 'https://www.digezz.ch/one-founder-one-venture-stories-in-switzerland/' }],
     linksFirst: true,
   },
+  {
+    slug: 'youban',
+    number: '20',
+    category: 'stories',
+    label: 'Prompt Whisperer & Animator',
+    title: 'YOUBAN',
+    titleZh: '游伴',
+    year: '2026',
+    role: 'Prompt Whisperer & Animator',
+    text: 'A startup fundraising video.',
+    textZh: '初创企业融资视频。',
+    media: [{ type: 'youtube', src: 'zdR0xJkstDw', alt: 'Youban' }],
+  },
 
   // ---------- INTERACTIONS ----------
   {
@@ -265,7 +278,7 @@ export const items: ArchiveItem[] = [
     title: '-10°C NIGHTS',
     year: '2019 – 2020', // 跨年那一晚
     role: 'Snow Cave Digger, Sleeper & Camera',
-    text: 'In our first New Years after moving to Switzerland, we dug snow caves with friends, slept in an igloo and ran naked through the snow.',
+    text: 'For our first two New Year’s Eves after moving to Switzerland, we dug snow caves with friends, slept in an igloo and ran naked through the snow.',
     cover: '/photo/snowcamp/snowcamp3.jpg',
     media: [
       { type: 'image', src: '/photo/snowcamp/snowcamp1.jpg', alt: 'Igloo lit up at night' },
