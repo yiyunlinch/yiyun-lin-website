@@ -113,7 +113,7 @@ function toggle(key: string) {
 
 .item {
   display: block;
-  padding: 10px 0 10px 16px;
+  padding: 16px 0 16px 16px; /* 每行约 52px 高，手指好点 */
   font-size: var(--small);
   color: var(--cat-deep);
 }
