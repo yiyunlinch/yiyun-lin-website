@@ -50,7 +50,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         :aria-label="sound.on.value ? 'Turn background sound off' : 'Turn background sound on'"
         @click="sound.toggle()"
       >
-        BACKGROUND SOUND {{ sound.on.value ? '×' : '↗' }}
+        BACKGROUND SOUND{{ sound.started.value ? (sound.on.value ? ' ×' : ' ↗') : '' }}
       </button>
       <button
         class="menu-btn"

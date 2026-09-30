@@ -20,7 +20,7 @@ function toggle(key: string) {
     <section class="archive" data-anchor="archive">
       <h2 v-reveal class="archive-title">ARCHIVE</h2>
 
-      <div v-for="cat in categories" :key="cat.key" v-reveal class="category" :class="{ open: open.has(cat.key) }" :data-cat="cat.key">
+      <div v-for="cat in categories" :key="cat.key" v-reveal class="category" :data-open="open.has(cat.key)" :data-cat="cat.key">
         <button
           class="cat-btn"
           :aria-expanded="open.has(cat.key)"
@@ -89,7 +89,8 @@ function toggle(key: string) {
   transition: transform 0.3s;
 }
 
-.open .cat-title::after {
+/* 用 data-open 不用 class：改 class 会把 v-reveal 加的 is-visible 冲掉，整块又变透明 */
+[data-open='true'] .cat-title::after {
   transform: rotate(180deg);
 }
 
@@ -99,7 +100,7 @@ function toggle(key: string) {
   transition: grid-template-rows 0.4s ease;
 }
 
-.open .items {
+[data-open='true'] .items {
   grid-template-rows: 1fr;
 }
 

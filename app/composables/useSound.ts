@@ -9,7 +9,7 @@
 import { findAnchor } from './useAnchor'
 
 const on = ref(true)
-let started = false
+const started = ref(false) // 真的出过声了没有（按钮在这之前不显示 × / ↗）
 let ctx: AudioContext | null = null
 let loading: Promise<unknown> | null = null
 
@@ -91,7 +91,7 @@ function start() {
   // 被浏览器挡住时 resume() 会一直等，直到访客点击
   Promise.all([ctx.resume(), loading]).then(() => {
     if (ctx!.state !== 'running') return
-    started = true
+    started.value = true
     stopWaiting()
     fadeTo(1)
   })
@@ -102,7 +102,7 @@ function onFirstGesture(e: Event) {
   // 第一次就点在 SOUND 按钮上的话，交给按钮自己处理
   if ((e.target as Element | null)?.closest?.('.sound-btn')) return
   stopWaiting()
-  if (on.value && !started) start()
+  if (on.value && !started.value) start()
 }
 function stopWaiting() {
   gestures.forEach(g => window.removeEventListener(g, onFirstGesture, true))
@@ -122,10 +122,10 @@ export function useSound() {
 
   function toggle() {
     // 还没出过声（显示 SOUND ↗ 但在等点击）：这一下就是开始播放
-    if (on.value && !started) return start()
+    if (on.value && !started.value) return start()
     on.value = !on.value
     if (on.value) start()
     else fadeTo(1)
   }
-  return { on: readonly(on), toggle }
+  return { on: readonly(on), started: readonly(started), toggle }
 }
