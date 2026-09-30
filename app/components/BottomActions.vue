@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// 首页和第二页底部的一排：ARCHIVE ↓ · SCROLL ↓ · ABOUT ME →
+// 首页和第二页底部的一排：ARCHIVE → · SCROLL ↓ · ABOUT ME ↓
 // hintOpacity：SCROLL 提示的透明度（首页往下滚时淡出）
 withDefaults(defineProps<{ hintOpacity?: number }>(), { hintOpacity: 1 })
 
@@ -11,8 +11,8 @@ const scrollDown = () => window.scrollBy({ top: innerHeight, behavior: 'smooth' 
 
 <template>
   <div class="actions">
-    <a href="/#archive" class="btn-frame" @click.prevent="goTo('archive')">Archive ↓</a>
-    <a href="/#about" class="btn-frame" @click.prevent="goTo('about')">About me →</a>
+    <a href="/#archive" class="btn-frame" @click.prevent="goTo('archive')">Archive →</a>
+    <a href="/#about" class="btn-frame" @click.prevent="goTo('about')">About me ↓</a>
     <!-- 和两个按钮同一高度，文字慢慢变亮变暗 -->
     <button
       class="scroll-hint"

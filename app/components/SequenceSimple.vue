@@ -51,7 +51,7 @@ function toggle(key: string) {
 /* 那句话靠近第一页的下边 */
 .phrase {
   margin: 0;
-  padding: 6vh 0 12vh;
+  padding: 6vh 0 0;
   font-size: clamp(22px, 6vw, 40px);
   font-weight: 300;
   line-height: 1.3;
@@ -59,6 +59,7 @@ function toggle(key: string) {
 }
 
 .archive {
+  padding-top: 130px; /* 跳到 Archive 时，大标题露在顶部 MENU / BACKGROUND SOUND 下面，不被挡住 */
   padding-bottom: 16vh;
 }
 

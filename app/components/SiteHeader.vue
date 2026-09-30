@@ -5,8 +5,8 @@ const open = ref(false)
 
 const links = [
   { label: 'HOME', anchor: 'home', arrow: '↑' },
-  { label: 'ARCHIVE', anchor: 'archive', arrow: '↓' },
-  { label: 'ABOUT', anchor: 'about', arrow: '→' },
+  { label: 'ARCHIVE', anchor: 'archive', arrow: '→' },
+  { label: 'ABOUT', anchor: 'about', arrow: '↓' },
 ]
 
 // 打开菜单时看现在在哪一部分，那一行亮白
