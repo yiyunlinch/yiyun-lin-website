@@ -187,7 +187,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   color: var(--fg);
 }
 
-/* 手机：菜单里 HOME / ABOUT / ARCHIVE 行距大一点，手指好点（写在上面的 .menu 后面才盖得过） */
+/* 手机：菜单里 HOME / ARCHIVE / ABOUT 行距大一点，手指好点（写在上面的 .menu 后面才盖得过） */
 @media (max-width: 600px) {
   .menu {
     gap: 12px;
