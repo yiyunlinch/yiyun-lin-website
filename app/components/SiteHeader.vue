@@ -122,7 +122,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   transition: color 0.3s;
 }
 
-/* 手机上一行放不下：BACKGROUND SOUND 和 MENU 上下两行，右对齐；YIYUN LIN 和第一行对齐 */
+/* 手机上一行放不下：MENU 在上、BACKGROUND SOUND 在下，右对齐；YIYUN LIN 和 MENU 对齐 */
 @media (max-width: 600px) {
   .header {
     align-items: flex-start;
@@ -133,7 +133,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   }
 
   .right {
-    flex-direction: column;
+    flex-direction: column-reverse; /* 代码里 SOUND 在前，手机上反过来 */
     align-items: flex-end;
     gap: 0;
   }

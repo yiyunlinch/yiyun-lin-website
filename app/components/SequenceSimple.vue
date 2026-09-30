@@ -34,7 +34,7 @@ const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
 }
 
 .steps {
-  padding: 16vh 0 10vh;
+  padding: 6vh 0 10vh; /* 那句话靠近第一页的下边 */
   display: flex;
   flex-direction: column;
   gap: 14vh;
