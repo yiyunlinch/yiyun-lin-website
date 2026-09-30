@@ -4,7 +4,7 @@
 // 两条声音，按滚动位置交替：
 // - sound.m4a：第一页的雾气声（音量已经降到 2.25%，首尾做过 2 秒等功率交叉淡化）
 // - sound2.m4a：Archive 的音乐，来自 SHANGHAI FRINGE FESTIVAL 的视频（maxidance.mp4，降到约 -46 LUFS，首尾也交叉淡化过）
-// - sound3.m4a：About me 的音乐，Pixabay 上 kalsstockmedia 的 Shri Ramaya Namaha（同样 -46 LUFS，交叉淡化过）
+// - sound3.m4a：About me 的音乐，Pixabay 上 kalsstockmedia 的 Hare Ram Hare Krishna Dhun（同样 -46 LUFS，交叉淡化过）
 // 作品页里没有背景声音
 import { findAnchor } from './useAnchor'
 
