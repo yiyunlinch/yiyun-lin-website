@@ -22,8 +22,10 @@ function findCurrent() {
   return found
 }
 
-function select(anchor: string) {
+// 先关菜单、等页面恢复可以滚动，再跳过去
+async function select(anchor: string) {
   open.value = false
+  await nextTick()
   goTo(anchor)
 }
 
@@ -135,7 +137,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   .right {
     flex-direction: column-reverse; /* 代码里 SOUND 在前，手机上反过来 */
     align-items: flex-end;
-    gap: 0;
+    gap: 10px;
   }
 
   .sound-btn,
@@ -183,6 +185,18 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 .menu a.current .num,
 .menu a:hover .num {
   color: var(--fg);
+}
+
+/* 手机：菜单里 HOME / ABOUT / ARCHIVE 行距大一点，手指好点（写在上面的 .menu 后面才盖得过） */
+@media (max-width: 600px) {
+  .menu {
+    gap: 12px;
+  }
+
+  .menu a {
+    padding: 12px 0;
+    font-size: 16px;
+  }
 }
 
 .fade-enter-active,

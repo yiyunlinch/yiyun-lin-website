@@ -48,7 +48,7 @@ html {
   font-family: var(--font);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
+  /* 不写 scroll-behavior: smooth：点 MENU / ARCHIVE / ABOUT 要直接跳到那一页，不一路滚过去（SCROLL ↓ 自己写了 smooth） */
 }
 
 body {
@@ -178,10 +178,6 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   [data-reveal] {
     opacity: 1;
     transform: none;

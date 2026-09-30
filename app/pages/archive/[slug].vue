@@ -127,11 +127,14 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
 .back {
   display: inline-block;
   margin-bottom: 32px;
-  transition: color 0.3s;
+  padding: 10px 0; /* 手指好点 */
+  color: var(--fg); /* 白色，一眼能看到 */
+  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
 .back:hover {
-  color: var(--fg);
+  opacity: 0.7;
 }
 
 .title {
