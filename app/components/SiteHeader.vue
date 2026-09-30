@@ -50,7 +50,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         :aria-label="sound.on.value ? 'Turn background sound off' : 'Turn background sound on'"
         @click="sound.toggle()"
       >
-        <span class="wide">BACKGROUND </span>SOUND {{ sound.on.value ? '×' : '↗' }}
+        BACKGROUND SOUND {{ sound.on.value ? '×' : '↗' }}
       </button>
       <button
         class="menu-btn"
@@ -122,10 +122,25 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   transition: color 0.3s;
 }
 
-/* 手机上一行放不下，只写 SOUND */
+/* 手机上一行放不下：BACKGROUND SOUND 和 MENU 上下两行，右对齐；YIYUN LIN 和第一行对齐 */
 @media (max-width: 600px) {
-  .wide {
-    display: none;
+  .header {
+    align-items: flex-start;
+  }
+
+  .logo {
+    line-height: 32px;
+  }
+
+  .right {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .sound-btn,
+  .menu-btn {
+    min-height: 32px;
   }
 }
 
