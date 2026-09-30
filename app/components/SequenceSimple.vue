@@ -1,28 +1,43 @@
 <script setup lang="ts">
 // 手机版（以及设置了"减少动态效果"的电脑）：
-// 同样的顺序，排成一列，往下滑时每块淡入
-import { categories, firstFrames, itemsIn } from '~/data/archive'
+// 那句话 → ARCHIVE → 四个大类；点大类，往下展开里面作品的身份（label，例如 Feature Film Line Producer），点了进作品页
+import { categories, itemsIn } from '~/data/archive'
 
-// 02 上面是那句话，03、04、05 没有标题
-const titles = ['Exploring the digital.\nFeeling the physical.', '', '', '']
-const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
+// 展开了哪些大类（可以同时展开好几个）
+const open = ref(new Set<string>())
+function toggle(key: string) {
+  const next = new Set(open.value)
+  if (next.has(key)) next.delete(key)
+  else next.add(key)
+  open.value = next
+}
 </script>
 
 <template>
   <div class="container simple">
-    <section class="steps">
-      <div v-for="(step, i) in steps" :key="step.item.slug" v-reveal class="step">
-        <p v-if="step.title" class="step-title" :class="{ phrase: i === 0 }">{{ step.title }}</p>
-        <ArchiveCard :item="step.item" :caption="false" />
-      </div>
-    </section>
+    <p v-reveal class="phrase">Exploring the digital.{{ '\n' }}Feeling the physical.</p>
 
     <section class="archive" data-anchor="archive">
-      <h2 class="archive-title">ARCHIVE</h2>
+      <h2 v-reveal class="archive-title">ARCHIVE</h2>
 
-      <div v-for="cat in categories" :key="cat.key" class="category">
-        <h3 class="cat-title" :data-cat="cat.key">{{ cat.title }} <span class="tagline">— {{ cat.tagline }}</span></h3>
-        <ArchiveCard v-for="item in itemsIn(cat.key)" :key="item.slug" v-reveal :item="item" />
+      <div v-for="cat in categories" :key="cat.key" v-reveal class="category" :class="{ open: open.has(cat.key) }" :data-cat="cat.key">
+        <button
+          class="cat-btn"
+          :aria-expanded="open.has(cat.key)"
+          :aria-controls="`cat-${cat.key}`"
+          @click="toggle(cat.key)"
+        >
+          <h3 class="cat-title">{{ cat.title }} <span class="tagline">— {{ cat.tagline }}</span></h3>
+        </button>
+
+        <!-- 0fr → 1fr：高度从 0 慢慢展开 -->
+        <div :id="`cat-${cat.key}`" class="items" :inert="!open.has(cat.key)">
+          <ul>
+            <li v-for="item in itemsIn(cat.key)" :key="item.slug">
+              <NuxtLink :to="`/archive/${item.slug}`" class="item">{{ item.label }}</NuxtLink>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   </div>
@@ -33,23 +48,12 @@ const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
   max-width: 960px;
 }
 
-.steps {
-  padding: 6vh 0 10vh; /* 那句话靠近第一页的下边 */
-  display: flex;
-  flex-direction: column;
-  gap: 14vh;
-}
-
-.step-title {
-  margin: 0 0 20px;
-  font-size: clamp(22px, 6vw, 40px);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
+/* 那句话靠近第一页的下边 */
 .phrase {
+  margin: 0;
+  padding: 6vh 0 12vh;
+  font-size: clamp(22px, 6vw, 40px);
   font-weight: 300;
-  letter-spacing: 0;
   line-height: 1.3;
   white-space: pre-line; /* 按 \n 换成两行 */
 }
@@ -59,20 +63,61 @@ const steps = firstFrames.map((item, i) => ({ title: titles[i], item }))
 }
 
 .archive-title {
-  margin: 0 0 8vh;
+  margin: 0 0 6vh;
   font-size: clamp(48px, 15vw, 120px);
   font-weight: 500;
   line-height: 1;
 }
 
 .category {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  margin-bottom: 12vh;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.category h3 {
+.category:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cat-btn {
+  display: block;
+  width: 100%;
+  padding: 22px 0;
+  text-align: left;
+}
+
+/* 箭头：收起时向下，展开时向上 */
+.cat-title::after {
+  transition: transform 0.3s;
+}
+
+.open .cat-title::after {
+  transform: rotate(180deg);
+}
+
+.items {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+}
+
+.open .items {
+  grid-template-rows: 1fr;
+}
+
+.items ul {
+  overflow: hidden;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: block;
+  padding: 10px 0 10px 16px;
+  font-size: var(--small);
+  color: var(--cat-deep);
+}
+
+.items li:last-child .item {
+  padding-bottom: 26px;
 }
 </style>
