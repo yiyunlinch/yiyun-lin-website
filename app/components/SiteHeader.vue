@@ -144,9 +144,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   }
 }
 
-.sound-btn:hover,
-.sound-btn[aria-pressed='true'],
-.menu-btn:hover {
+/* MENU 亮（白），BACKGROUND SOUND 暗（灰），鼠标移上去才变亮 */
+.menu-btn,
+.sound-btn:hover {
   color: var(--fg);
 }
 
