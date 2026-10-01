@@ -4,7 +4,8 @@ import type { Media } from '~/data/archive'
 
 // ratio：画框的比例，默认 16:9；左右两个窗口时照片那边用 4:3
 // autoplay：YouTube 自动播放；一页有好几个视频时，只有第一个自动播放
-const props = withDefaults(defineProps<{ media: Media[], title: string, ratio?: string, autoplay?: boolean }>(), { autoplay: true })
+// centerCaption：小字放在图片正下方居中，比图片稍宽一点（竖的图片在 16:9 框里时用）
+const props = withDefaults(defineProps<{ media: Media[], title: string, ratio?: string, autoplay?: boolean, centerCaption?: boolean }>(), { autoplay: true })
 
 const index = ref(0)
 const count = computed(() => props.media.length)
@@ -13,6 +14,19 @@ const current = computed(() => props.media[index.value])
 function go(step: number) {
   index.value = (index.value + step + count.value) % count.value
 }
+
+// 图片本身的宽高比：用来算图片在框里实际有多宽，小字跟着这个宽度
+const imgEl = ref<HTMLImageElement>()
+const imgRatio = ref<number>()
+function readRatio() {
+  const img = imgEl.value
+  imgRatio.value = img?.complete && img.naturalWidth ? img.naturalWidth / img.naturalHeight : undefined
+}
+watch(current, async () => {
+  await nextTick()
+  readRatio()
+})
+onMounted(readRatio) // 页面打开前图片可能已经加载好了，这时 @load 不会再触发
 
 // 键盘 ← →
 function onKey(e: KeyboardEvent) {
@@ -93,9 +107,15 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="viewer" @touchstart.passive="onTouchStart" @touchend="onTouchEnd">
+  <div
+    class="viewer"
+    :data-center-caption="centerCaption || undefined"
+    :style="centerCaption ? { '--img-r': imgRatio ?? 1, ...(ratio ? { '--stage-r': ratio } : {}) } : undefined"
+    @touchstart.passive="onTouchStart"
+    @touchend="onTouchEnd"
+  >
     <div class="box">
-    <div class="stage" :style="ratio ? { aspectRatio: ratio } : undefined">
+    <div class="stage" :data-type="current?.type" :style="ratio ? { aspectRatio: ratio } : undefined">
       <template v-if="current?.type === 'site'">
         <iframe
           v-if="isDesktop"
@@ -123,6 +143,15 @@ onBeforeUnmount(() => {
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
         allowfullscreen
       />
+      <!-- Spotify：官方播放器，352px 高时显示大封面图 -->
+      <iframe
+        v-else-if="current?.type === 'spotify'"
+        :key="current.src"
+        :src="`https://open.spotify.com/embed/episode/${current.src}`"
+        :title="current.alt ?? title"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
       <template v-else-if="current">
         <video
           v-if="current.type === 'video'"
@@ -134,9 +163,9 @@ onBeforeUnmount(() => {
           playsinline
         />
         <a v-else-if="current.href" :key="current.src" :href="current.href" target="_blank" rel="noopener" class="img-link">
-          <img :src="current.src" :alt="current.alt ?? title">
+          <img ref="imgEl" :src="current.src" :alt="current.alt ?? title" @load="readRatio">
         </a>
-        <img v-else :key="current.src" :src="current.src" :alt="current.alt ?? title">
+        <img v-else ref="imgEl" :key="current.src" :src="current.src" :alt="current.alt ?? title" @load="readRatio">
       </template>
       <span v-else class="placeholder">IMAGE / VIDEO</span>
     </div>
@@ -164,6 +193,30 @@ onBeforeUnmount(() => {
   font-size: var(--small);
   letter-spacing: 0.08em;
   color: var(--muted);
+  white-space: pre-line; /* \n 换行：英文一行，中文一行 */
+}
+
+/* 小字居中：框的高 = 宽 / 框的比例，图片的宽 = 高 × 图片的比例，小字两边各多出 40px，但不超过框 */
+[data-center-caption] {
+  --stage-r: 16 / 9;
+  container-type: inline-size;
+}
+
+/* 手机：16:9 里竖的图片太小，框改成竖一点 */
+@media (max-width: 899px) {
+  [data-center-caption] {
+    --stage-r: 4 / 5;
+  }
+}
+
+[data-center-caption] .stage {
+  aspect-ratio: var(--stage-r);
+}
+
+[data-center-caption] .caption {
+  max-width: min(100%, calc(100cqw / (var(--stage-r)) * var(--img-r) + 80px));
+  margin-inline: auto;
+  text-align: center;
 }
 
 .stage {
@@ -171,6 +224,7 @@ onBeforeUnmount(() => {
   min-height: 0; /* 竖一点的图片不会把框撑高，框永远是 16:9 */
   overflow: hidden;
   display: grid;
+  grid-template: 100% / 100%; /* 格子和框一样大：竖的图片不会把格子撑高、被裁掉 */
   place-items: center;
 }
 
@@ -191,6 +245,16 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* Spotify 播放器自己有圆角和背景，不用 16:9 的黑框 */
+.stage[data-type='spotify'] {
+  aspect-ratio: auto;
+  height: 352px;
+}
+
+.box:has(.stage[data-type='spotify']) {
+  background: none;
 }
 
 .placeholder {

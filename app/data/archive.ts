@@ -7,7 +7,8 @@ export type CategoryKey = 'stories' | 'productions' | 'interactions' | 'experien
 export interface Media {
   // site = 嵌入一个网站：电脑上可以直接在页面里浏览，手机上显示 preview 视频
   // youtube = src 写 YouTube 视频的 ID（网址 watch?v= 后面那串）
-  type: 'image' | 'video' | 'site' | 'youtube'
+  // spotify = src 写 Spotify 节目的 ID（网址 episode/ 后面那串），播放器里带封面图
+  type: 'image' | 'video' | 'site' | 'youtube' | 'spotify'
   src: string
   alt?: string
   preview?: string // site 用：一段网站滚动的录屏，也当首页封面
@@ -48,6 +49,7 @@ export interface Part {
   place?: string
   text?: string
   media: Media[]
+  captionCenter?: boolean // 小字放在图片正下方居中（竖的图片用）
   links?: { label: string, href: string }[]
 }
 
@@ -193,15 +195,6 @@ export const items: ArchiveItem[] = [
 
   // ---------- OBJECTS ----------
   {
-    slug: 'book-print',
-    number: '11',
-    category: 'experiences',
-    label: 'Artist Book Maker',
-    title: 'BOOK / PRINT',
-    role: 'Artist Book Maker',
-    media: [{ type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' }],
-  },
-  {
     slug: 'yoga',
     number: '13',
     category: 'experiences',
@@ -292,6 +285,53 @@ export const items: ArchiveItem[] = [
       { type: 'image', src: '/photo/snowcamp/snowcamp99.jpg', alt: 'Digging in the snow' },
     ],
     mediaRight: [{ type: 'youtube', src: 'oZ3RcSFZL90', alt: 'Snow Camping New Year 2020' }],
+  },
+  {
+    slug: 'seen-by-others',
+    number: '21',
+    category: 'experiences',
+    label: 'SEEN BY OTHERS',
+    title: 'SEEN BY OTHERS',
+    role: 'SEEN BY OTHERS',
+    cover: '/photo/experience/linqin-cover.jpg',
+    media: [],
+    parts: [
+      {
+        title: 'PORTRAIT',
+        place: '',
+        // 一个窗口里左右切换：先看画，往右是照片；两张一样高，宽度按各自比例
+        media: [
+          { type: 'image', src: '/photo/experience/antoni-santin.jpg', alt: 'Oil portrait of Yiyun Lin standing between stacks of books, by Antoni Santin', caption: 'Portrait of me, 229 × 117 cm, oil on canvas by Antoni Santin, 2013' },
+          { type: 'image', src: '/photo/experience/no-bra.jpg', alt: 'Photo of Yiyun Lin for No Bra Day', caption: 'Photographed for No Bra Day, Breast Cancer Awareness Month, 2013' },
+          { type: 'image', src: '/photo/experience/linqin.jpg', alt: 'Painting of Lin Qin and Yiyun Lin by Lin Qin', caption: 'My grandfather Lin Qin painted the two of us. Exhibition “Shoujing Danqing · Lin Qin”, 2014\n我的爷爷林禽画的他和我。展览《守静丹青·林禽》，2014' },
+        ],
+        captionCenter: true,
+      },
+      {
+        title: 'ROOTS & ROUTES',
+        year: '2025',
+        place: '',
+        links: [{ label: 'www.digezz.ch/roots-routes-staffel-02', href: 'https://www.digezz.ch/roots-routes-staffel-02/' }],
+        text: 'Interviewed by Fabienne for a podcast.',
+        media: [{ type: 'spotify', src: '3rLJEGMtVW1SZBVyYDXhpE', alt: 'staffel02: yiyun' }],
+      },
+    ],
+  },
+  {
+    slug: 'book-print',
+    number: '11',
+    category: 'experiences',
+    label: 'Doodler',
+    title: 'HAND-DRAWN',
+    role: 'Doodler',
+    cover: '/photo/doodler/wall-cover.jpg', // wall.jpg 左边有脸的那一块
+    media: [
+      { type: 'image', src: '/photo/doodler/wall.jpg', alt: 'Painting of a woman with long flowing hair on a bedroom wall' },
+      { type: 'image', src: '/photo/doodler/map-wall.jpg', alt: 'Hand-drawn map of Shanghai streets and friends on a wall' },
+      { type: 'image', src: '/photo/doodler/rotterdam-sketchbook.jpg', alt: 'Holding up a sketchbook mind map in Rotterdam' },
+      { type: 'image', src: '/photo/doodler/ink-pen.jpg', alt: 'Drawing with a dip pen and ink in a folded book' },
+      { type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' },
+    ],
   },
 ]
 

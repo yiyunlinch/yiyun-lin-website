@@ -54,6 +54,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
           :media="part.media"
           :title="part.title"
           :autoplay="i === 0"
+          :center-caption="part.captionCenter"
           :style="fitHeight ? { '--fit-h': `${fitHeight}px` } : undefined"
         />
       </section>
