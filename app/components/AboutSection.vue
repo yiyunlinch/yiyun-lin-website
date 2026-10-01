@@ -10,6 +10,12 @@ import { site } from '~/data/site'
 
     <div class="copy">
       <p v-for="(paragraph, i) in site.about" :key="i" v-reveal>{{ paragraph }}</p>
+
+      <!-- 介绍下面：Antoni Santin 画的我的肖像 -->
+      <figure v-reveal class="portrait">
+        <img src="/photo/antoni-santin.jpg" alt="Oil portrait of Yiyun Lin standing between stacks of books, by Antoni Santin" loading="lazy">
+        <figcaption>Portrait of me, 229 × 117 cm, oil on canvas by Antoni Santin, 2013</figcaption>
+      </figure>
     </div>
   </section>
 </template>
@@ -38,6 +44,23 @@ import { site } from '~/data/site'
   margin: 0 0 1.4em;
   font-size: var(--small);
   line-height: 1.7;
+}
+
+.portrait {
+  margin: 8vh 0 0;
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+}
+
+.portrait figcaption {
+  margin-top: 14px;
+  font-size: var(--label);
+  line-height: 1.6;
+  color: var(--fg-2);
 }
 
 @media (max-width: 899px) {
