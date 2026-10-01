@@ -149,6 +149,7 @@ export const items: ArchiveItem[] = [
     label: 'Prompt Whisperer & Animator',
     title: 'YOUBAN 游伴', // 中英文在同一行
     year: '2026',
+    place: 'IN THE CLOUD', // 不是真实地点：AI 动画"住"在网络里
     role: 'Prompt Whisperer & Animator',
     text: 'A startup fundraising video.',
     textZh: '初创企业融资视频。',
