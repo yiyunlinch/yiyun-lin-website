@@ -151,8 +151,8 @@ export const items: ArchiveItem[] = [
     year: '2026',
     place: 'IN THE CLOUD', // 不是真实地点：AI 动画"住"在网络里
     role: 'Prompt Whisperer & Animator',
-    text: 'A startup fundraising video.',
-    textZh: '初创企业融资视频。',
+    text: 'A fundraising video for a Chinese startup.',
+    textZh: '为一家中国初创企业制作的融资视频。',
     media: [{ type: 'youtube', src: 'zdR0xJkstDw', alt: 'Youban' }],
   },
 
