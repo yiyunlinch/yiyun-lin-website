@@ -147,8 +147,7 @@ export const items: ArchiveItem[] = [
     number: '20',
     category: 'stories',
     label: 'Prompt Whisperer & Animator',
-    title: 'YOUBAN',
-    titleZh: '游伴',
+    title: 'YOUBAN 游伴', // 中英文在同一行
     year: '2026',
     role: 'Prompt Whisperer & Animator',
     text: 'A startup fundraising video.',
