@@ -152,6 +152,11 @@ onBeforeUnmount(() => {
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
       />
+      <!-- 书页：电脑上两页并排一张大图，手机上一页一页上下排；点了打开 PDF -->
+      <a v-else-if="current?.type === 'pdf'" :key="current.src" :href="current.src" target="_blank" rel="noopener" class="pdf">
+        <img v-if="isDesktop || !current.pages" :src="current.poster" :alt="current.alt ?? title">
+        <img v-for="(page, i) in current.pages" v-else :key="page" :src="page" :alt="`${current.alt ?? title}, page ${i + 1}`">
+      </a>
       <template v-else-if="current">
         <video
           v-if="current.type === 'video'"
@@ -245,6 +250,27 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* 书页按自己的比例显示，宽度占满，不用 16:9 的框 */
+.stage[data-type='pdf'] {
+  aspect-ratio: auto;
+  grid-template: auto / 100%;
+}
+
+.pdf {
+  display: block;
+  width: 100%;
+}
+
+.pdf img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pdf img + img {
+  margin-top: 12px;
 }
 
 /* Spotify 播放器自己有圆角和背景，不用 16:9 的黑框 */

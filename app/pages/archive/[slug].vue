@@ -221,6 +221,11 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
     max-width: calc((var(--fit-h, 100vh) - 32px) * 16 / 9);
   }
 
+  /* 书页跟着屏幕宽度变大，不限制在第一屏里 */
+  .viewer:has(.stage[data-type='pdf']) {
+    max-width: none;
+  }
+
   /* 两个窗口的宽度按比例分（左边 --left-r 和 16:9），高度就一样 */
   .viewer.split {
     --split-gap: 16px;

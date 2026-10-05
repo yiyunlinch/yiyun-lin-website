@@ -8,7 +8,8 @@ export interface Media {
   // site = 嵌入一个网站：电脑上可以直接在页面里浏览，手机上显示 preview 视频
   // youtube = src 写 YouTube 视频的 ID（网址 watch?v= 后面那串）
   // spotify = src 写 Spotify 节目的 ID（网址 episode/ 后面那串），播放器里带封面图
-  type: 'image' | 'video' | 'site' | 'youtube' | 'spotify'
+  // pdf = 书页：电脑上显示 poster（两页并排的大图，跟着屏幕宽度变），手机上 pages 一页一页上下排；点了打开 src 的 PDF
+  type: 'image' | 'video' | 'site' | 'youtube' | 'spotify' | 'pdf'
   src: string
   alt?: string
   preview?: string // site 用：一段网站滚动的录屏，也当首页封面
@@ -16,6 +17,7 @@ export interface Media {
   href?: string // 图片可以点：点了在新窗口打开这个网址
   start?: number // youtube 用：从第几秒开始播放
   caption?: string // 显示在画框下面的小字
+  pages?: string[] // pdf 用：每一页单独的图，手机上上下排
 }
 
 export interface ArchiveItem {
@@ -324,16 +326,22 @@ export const items: ArchiveItem[] = [
     label: 'Writer & Illustrator',
     title: 'WORDS & DRAWINGS', // 浏览器标签页上的名字；页面上显示下面的 parts
     role: 'Writer & Illustrator',
-    cover: '/photo/doodler/wall-cover.jpg', // wall.jpg 左边有脸的那一块
+    cover: '/photo/writing/yellow-crane-cover.jpg', // 我画的仙鹤，左右补了白边成 16:9，翅膀不会被裁掉
     media: [],
     parts: [
       {
         title: 'DER GELBE KRANICH KEHRT NICHT WIEDER', // 《黄鹤一去不复返》，WORTart Booklet 2023 第 38–39 页
         year: '2023',
-        text: 'A spoken word piece in German about my grandfather Lin Qin, his painting studio and a little tin of peanut candies. It borrows a line from the Tang poem “Yellow Crane Tower”: the yellow crane, once flown, never returns.\nWritten for the module “Schreiben und Sprechen” at FH Graubünden and published in the WORTart Booklet 2023.',
+        text: 'My grandfather was a traditional Chinese painter. For as long as I can remember, he lived a very regular life: painting and reading, every day. This is my memory of him.\nPublished in the WORTart Booklet 2023, FHGR.',
         // FHGR 的 booklet 网址每年换成新的一期，所以把 2023 年这两页存在自己网站上
         links: [{ label: 'WORTart Booklet 2023, p. 38–39 (PDF)', href: '/photo/writing/wortart-2023-yiyun-lin.pdf' }],
-        media: [{ type: 'image', src: '/photo/writing/yellow-crane.jpg', alt: 'Drawing of a red-crowned crane flying in front of a red sun' }],
+        media: [{
+          type: 'pdf',
+          src: '/photo/writing/wortart-2023-yiyun-lin.pdf',
+          poster: '/photo/writing/wortart-2023-spread.jpg',
+          pages: ['/photo/writing/wortart-2023-left.jpg', '/photo/writing/wortart-2023-right.jpg'],
+          alt: 'WORTart Booklet 2023, pages 38–39: Der gelbe Kranich kehrt nicht wieder, by Yiyun Lin',
+        }],
       },
       {
         title: 'HAND-DRAWN',
