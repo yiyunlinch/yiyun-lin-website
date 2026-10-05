@@ -52,6 +52,7 @@ export interface Part {
   text?: string
   media: Media[]
   captionCenter?: boolean // 小字放在图片正下方居中（竖的图片用）
+  row?: boolean // true = 图片从左到右排开，一样高（不用左右切换的窗口）
   links?: { label: string, href: string }[]
 }
 
@@ -333,8 +334,7 @@ export const items: ArchiveItem[] = [
         title: 'DER GELBE KRANICH KEHRT NICHT WIEDER', // 《黄鹤一去不复返》，WORTart Booklet 2023 第 38–39 页
         year: '2023',
         text: 'My grandfather was a traditional Chinese painter. For as long as I can remember, he lived a very regular life: painting and reading, every day. This is my memory of him.\nPublished in the WORTart Booklet 2023, FHGR.',
-        // FHGR 的 booklet 网址每年换成新的一期，所以把 2023 年这两页存在自己网站上
-        links: [{ label: 'WORTart Booklet 2023, p. 38–39 (PDF)', href: '/photo/writing/wortart-2023-yiyun-lin.pdf' }],
+        // FHGR 的 booklet 网址每年换成新的一期，所以把 2023 年这两页存在自己网站上（点书页打开）
         media: [{
           type: 'pdf',
           src: '/photo/writing/wortart-2023-yiyun-lin.pdf',
@@ -345,12 +345,12 @@ export const items: ArchiveItem[] = [
       },
       {
         title: 'HAND-DRAWN',
+        row: true,
         media: [
           { type: 'image', src: '/photo/doodler/wall.jpg', alt: 'Painting of a woman with long flowing hair on a bedroom wall' },
           { type: 'image', src: '/photo/doodler/map-wall.jpg', alt: 'Hand-drawn map of Shanghai streets and friends on a wall' },
           { type: 'image', src: '/photo/doodler/rotterdam-sketchbook.jpg', alt: 'Holding up a sketchbook mind map in Rotterdam' },
           { type: 'image', src: '/photo/doodler/ink-pen.jpg', alt: 'Drawing with a dip pen and ink in a folded book' },
-          { type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' },
         ],
       },
     ],

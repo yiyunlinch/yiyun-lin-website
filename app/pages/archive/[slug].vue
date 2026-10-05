@@ -47,8 +47,13 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
           </li>
         </ul>
         <p v-if="part.text" class="text">{{ part.text }}</p>
+        <!-- row：图片从左到右排成一条，一样高，排不下就左右滑动 -->
+        <div v-if="part.row" class="row">
+          <img v-for="m in part.media" :key="m.src" :src="m.src" :alt="m.alt ?? part.title">
+        </div>
         <!-- 第一段的视频放进第一屏；后面的视频和第一个一样宽 -->
         <MediaViewer
+          v-else
           :ref="i === 0 ? 'viewer' : undefined"
           class="viewer"
           :media="part.media"
@@ -208,6 +213,31 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
 
 .part .viewer {
   --fit-h: calc(100vh - 220px);
+}
+
+/* 一排图片：高度是普通画框的 70%（画框高 = 宽 × 9/16，最多 100vh - 220px） */
+.row {
+  container-type: inline-size;
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
+}
+
+.row img {
+  display: block;
+  flex: none;
+  height: calc(0.7 * min(100cqw * 9 / 16, 100vh - 220px));
+  width: auto;
+}
+
+/* 手机：屏幕窄，图片高一点（画框宽的 70%） */
+@media (max-width: 899px) {
+  .row img {
+    height: 70cqw;
+  }
 }
 
 /* 电脑：宽度按 16:9 跟着可用高度走，保证整个在这一屏里 */
