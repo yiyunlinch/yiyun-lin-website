@@ -206,7 +206,7 @@ export const items: ArchiveItem[] = [
     year: '2018 – NOW',
     place: 'FROM INDIA',
     role: 'Yogi, TTC 500 Certified Teacher',
-    text: 'Every few years I return to India to practise. I am deeply drawn to its spiritual culture, and I have always known it is my second home.\nDhyana, Pranayama, Bhakti, Shanti, Ommmmmmmmm\nIn 2027 I will go back to my guru, Dr. Ashutosh, to study again.',
+    text: 'Every few years I return to India to practise. I am deeply drawn to its spiritual culture, and I have always known it is my second home.\nIn 2027 I will go back to my guru, Dr. Ashutosh, to study again.',
     cover: '/photo/yoga/yoga3.jpg',
     media: [
       { type: 'image', src: '/photo/yoga/yoga1.jpg', alt: 'With my guru' },
