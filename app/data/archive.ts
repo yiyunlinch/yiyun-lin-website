@@ -290,9 +290,9 @@ export const items: ArchiveItem[] = [
     slug: 'seen-by-others',
     number: '21',
     category: 'experiences',
-    label: 'SEEN BY OTHERS',
+    label: 'Seen by Others',
     title: 'SEEN BY OTHERS',
-    role: 'SEEN BY OTHERS',
+    role: 'Seen by Others',
     cover: '/photo/experience/linqin-cover.jpg',
     media: [],
     parts: [
@@ -321,16 +321,30 @@ export const items: ArchiveItem[] = [
     slug: 'book-print',
     number: '11',
     category: 'experiences',
-    label: 'Doodler',
-    title: 'HAND-DRAWN',
-    role: 'Doodler',
+    label: 'Writer & Illustrator',
+    title: 'WORDS & DRAWINGS', // 浏览器标签页上的名字；页面上显示下面的 parts
+    role: 'Writer & Illustrator',
     cover: '/photo/doodler/wall-cover.jpg', // wall.jpg 左边有脸的那一块
-    media: [
-      { type: 'image', src: '/photo/doodler/wall.jpg', alt: 'Painting of a woman with long flowing hair on a bedroom wall' },
-      { type: 'image', src: '/photo/doodler/map-wall.jpg', alt: 'Hand-drawn map of Shanghai streets and friends on a wall' },
-      { type: 'image', src: '/photo/doodler/rotterdam-sketchbook.jpg', alt: 'Holding up a sketchbook mind map in Rotterdam' },
-      { type: 'image', src: '/photo/doodler/ink-pen.jpg', alt: 'Drawing with a dip pen and ink in a folded book' },
-      { type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' },
+    media: [],
+    parts: [
+      {
+        title: 'DER GELBE KRANICH KEHRT NICHT WIEDER', // 《黄鹤一去不复返》，WORTart Booklet 2023 第 38–39 页
+        year: '2023',
+        text: 'A spoken word piece in German about my grandfather Lin Qin, his painting studio and a little tin of peanut candies. It borrows a line from the Tang poem “Yellow Crane Tower”: the yellow crane, once flown, never returns.\nWritten for the module “Schreiben und Sprechen” at FH Graubünden and published in the WORTart Booklet 2023.',
+        // FHGR 的 booklet 网址每年换成新的一期，所以把 2023 年这两页存在自己网站上
+        links: [{ label: 'WORTart Booklet 2023, p. 38–39 (PDF)', href: '/photo/writing/wortart-2023-yiyun-lin.pdf' }],
+        media: [{ type: 'image', src: '/photo/writing/yellow-crane.jpg', alt: 'Drawing of a red-crowned crane flying in front of a red sun' }],
+      },
+      {
+        title: 'HAND-DRAWN',
+        media: [
+          { type: 'image', src: '/photo/doodler/wall.jpg', alt: 'Painting of a woman with long flowing hair on a bedroom wall' },
+          { type: 'image', src: '/photo/doodler/map-wall.jpg', alt: 'Hand-drawn map of Shanghai streets and friends on a wall' },
+          { type: 'image', src: '/photo/doodler/rotterdam-sketchbook.jpg', alt: 'Holding up a sketchbook mind map in Rotterdam' },
+          { type: 'image', src: '/photo/doodler/ink-pen.jpg', alt: 'Drawing with a dip pen and ink in a folded book' },
+          { type: 'image', src: '/photo/04-web.jpg', alt: 'Handmade cardboard TV with Simpsons figures' },
+        ],
+      },
     ],
   },
 ]
