@@ -180,20 +180,32 @@ export const items: ArchiveItem[] = [
     }],
     links: [{ label: 'Open story.yiyun.me', href: 'https://story.yiyun.me/' }],
   },
-  { slug: 'maxibox', number: '09', category: 'interactions', label: 'Maxibox Creator', title: 'MAXIBOX', role: 'Maxibox Creator', media: [] },
   {
     slug: 'zahnihero',
     number: '16', // 原来的 03，往后移了
     category: 'interactions',
     label: 'Physical Computing Designer',
-    title: 'ZAHNIHERO',
-    year: '2025',
+    title: 'MAXIBOX · ZAHNIHERO', // 浏览器标签页上的名字；页面上显示下面的 parts
     role: 'Physical Computing Designer',
-    text: 'ZahniHero is an interactive toothbrushing assistant designed specifically for children, to motivate them to brush their teeth for up to 3 minutes. All components were tested, but the final prototype was never fully assembled.',
     cover: '/photo/03computer.jpg',
-    media: [{ type: 'image', src: '/photo/16zahnihero.jpg', alt: 'ZahniHero prototype' }], // GitHub README 第一张图
-    links: [{ label: 'github.com/yiyunlinch/zahnihero', href: 'https://github.com/yiyunlinch/zahnihero' }],
-    linksFirst: true,
+    media: [],
+    // Maxibox 原来是单独一格（09），现在放进这页第一段
+    parts: [
+      {
+        title: 'MAXIBOX',
+        year: '2026',
+        text: 'Maxibox is a screen-free AI voice box for children aged 2 to 10. Kids hold a button and ask a question; the box answers out loud. Parents choose the language, age and answer style.',
+        media: [],
+        links: [{ label: 'maxibox.onrender.com', href: 'https://maxibox.onrender.com' }],
+      },
+      {
+        title: 'ZAHNIHERO',
+        year: '2025',
+        text: 'ZahniHero is an interactive toothbrushing assistant designed specifically for children, to motivate them to brush their teeth for up to 3 minutes. All components were tested, but the final prototype was never fully assembled.',
+        media: [{ type: 'image', src: '/photo/16zahnihero.jpg', alt: 'ZahniHero prototype' }], // GitHub README 第一张图
+        links: [{ label: 'github.com/yiyunlinch/zahnihero', href: 'https://github.com/yiyunlinch/zahnihero' }],
+      },
+    ],
   },
 
   // ---------- OBJECTS ----------

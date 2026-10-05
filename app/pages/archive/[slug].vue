@@ -51,7 +51,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', fit))
         <FilmStrip v-if="part.row" :media="part.media" :title="part.title" />
         <!-- 第一段的视频放进第一屏；后面的视频和第一个一样宽 -->
         <MediaViewer
-          v-else
+          v-else-if="part.media.length"
           :ref="i === 0 ? 'viewer' : undefined"
           class="viewer"
           :media="part.media"
