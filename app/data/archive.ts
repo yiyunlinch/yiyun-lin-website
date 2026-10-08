@@ -158,6 +158,8 @@ export const items: ArchiveItem[] = [
     role: 'Prompt Whisperer & Animator',
     text: 'A fundraising video for a Chinese startup.',
     textZh: '为一家中国初创企业制作的融资视频。',
+    cover: '/photo/20youban-poster.jpg',
+    coverVideo: '/photo/20youban.mp4', // 动态封面：视频 0:40–1:02（小熊进博物馆那段），静音循环
     media: [{ type: 'youtube', src: 'zdR0xJkstDw', alt: 'Youban' }],
   },
 
